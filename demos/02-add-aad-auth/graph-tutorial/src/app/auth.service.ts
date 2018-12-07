@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
+import { Client } from '@microsoft/microsoft-graph-client';
 
 import { AlertsService } from './alerts.service';
 import { OAuthSettings } from '../oauth';
@@ -30,10 +31,33 @@ export class AuthService {
 
     if (result) {
       this.authenticated = true;
-      // Temporary placeholder
+
+      let graphClient = Client.init({
+        // Initialize the Graph client with an auth
+        // provider that requests the token from the
+        // auth service
+        authProvider: async(done) => {
+          let token = await this.getAccessToken()
+            .catch((reason) => {
+              done(reason, null);
+            })
+
+          if (token)
+          {
+            done(null, token);
+          } else {
+            done("Could not get an access token", null);
+          }
+        }
+      });
+
+      // Get the user from Graph (GET /me)
+      let user = await graphClient.api('/me').get();
+
       this.user = new User();
-      this.user.displayName = "Adele Vance";
-      this.user.email = "AdeleV@contoso.com";
+      this.user.displayName = user.displayName;
+      // Prefer the mail property, but fall back to userPrincipalName
+      this.user.email = user.mail || user.userPrincipalName;
     }
   }
 
@@ -51,8 +75,6 @@ export class AuthService {
         this.alertsService.add('Get token failed', JSON.stringify(reason, null, 2));
       });
 
-    // Temporary to display token in an error box
-    if (result) this.alertsService.add('Token acquired', result);
     return result;
   }
 }
