@@ -9,12 +9,12 @@ import { Alert } from '../alert';
 })
 export class AlertsComponent implements OnInit {
 
-  constructor(private alertService: AlertsService) { }
+  constructor(private alertsService: AlertsService) { }
 
   ngOnInit() {
   }
 
   close(alert: Alert) {
-    this.alertService.remove(alert);
+    this.alertsService.remove(alert);
   }
 }

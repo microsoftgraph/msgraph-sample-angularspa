@@ -30,6 +30,7 @@ Before moving on, install some additional packages that you will use later:
 - [fontawesome-svg-core](https://github.com/FortAwesome/Font-Awesome), [free-regular-svg-icons](https://github.com/FortAwesome/Font-Awesome), and [free-solid-svg-icons](https://github.com/FortAwesome/Font-Awesome) for the FontAwesome icons used in the sample.
 - [moment](https://github.com/moment/moment) for formatting dates and times.
 - [msal-angular](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-angular/README.md) for authenticating to Azure Active Directory and retrieving access tokens.
+- [rxjs-compat](https://github.com/ReactiveX/rxjs/tree/master/compat), required for the `msal-angular` package.
 - [microsoft-graph-client](https://github.com/microsoftgraph/msgraph-sdk-javascript) for making calls to Microsoft Graph.
 
 Run the following command in your CLI.
@@ -37,7 +38,7 @@ Run the following command in your CLI.
 ```Shell
 npm install bootstrap@4.1.3 @fortawesome/angular-fontawesome@0.3.0 @fortawesome/fontawesome-svg-core@1.2.8
 npm install @fortawesome/free-regular-svg-icons@5.5.0 @fortawesome/free-solid-svg-icons@5.5.0
-npm install moment@2.22.2 msal@0.2.3 @microsoft/microsoft-graph-client@1.3.0
+npm install @azure/msal-angular@0.2.3 rxjs-compat@6.3.3 @microsoft/microsoft-graph-client@1.3.0
 ```
 
 ## Design the app
@@ -314,13 +315,13 @@ import { Alert } from '../alert';
 })
 export class AlertsComponent implements OnInit {
 
-  constructor(private alertService: AlertsService) { }
+  constructor(private alertsService: AlertsService) { }
 
   ngOnInit() {
   }
 
   close(alert: Alert) {
-    this.alertService.remove(alert);
+    this.alertsService.remove(alert);
   }
 }
 ```
@@ -328,7 +329,7 @@ export class AlertsComponent implements OnInit {
 Then open the `./src/app/alerts/alerts.component.html` file and replace its contents with the following.
 
 ```html
-<div *ngFor="let alert of alertService.alerts">
+<div *ngFor="let alert of alertsService.alerts">
   <ngb-alert type="danger" (close)="close(alert)">
     <p>{{alert.message}}</p>
     <pre *ngIf="alert.debug" class="alert-pre border bg-light p-2"><code>{{alert.debug}}</code></pre>

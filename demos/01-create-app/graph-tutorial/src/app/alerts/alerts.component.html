@@ -1,4 +1,4 @@
-<div *ngFor="let alert of alertService.alerts">
+<div *ngFor="let alert of alertsService.alerts">
   <ngb-alert type="danger" (close)="close(alert)">
     <p>{{alert.message}}</p>
     <pre *ngIf="alert.debug" class="alert-pre border bg-light p-2"><code>{{alert.debug}}</code></pre>
