@@ -38,7 +38,7 @@ Run the following command in your CLI.
 ```Shell
 npm install bootstrap@4.1.3 @fortawesome/angular-fontawesome@0.3.0 @fortawesome/fontawesome-svg-core@1.2.8
 npm install @fortawesome/free-regular-svg-icons@5.5.0 @fortawesome/free-solid-svg-icons@5.5.0
-npm install @azure/msal-angular@0.2.3 rxjs-compat@6.3.3 @microsoft/microsoft-graph-client@1.3.0
+npm install @azure/msal-angular@0.1.2 rxjs-compat@6.3.3 @microsoft/microsoft-graph-client@1.3.0
 ```
 
 ## Design the app
