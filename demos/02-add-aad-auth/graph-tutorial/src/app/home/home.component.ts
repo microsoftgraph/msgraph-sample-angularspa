@@ -15,10 +15,5 @@ export class HomeComponent implements OnInit {
 
   async signIn(): Promise<void> {
     await this.authService.signIn();
-
-    // Temporary to display the token
-    if (this.authService.authenticated) {
-      let token = await this.authService.getAccessToken();
-    }
   }
 }

@@ -13,6 +13,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HomeComponent } from './home/home.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { OAuthSettings } from '../oauth';
+import { CalendarComponent } from './calendar/calendar.component';
 
 // Add FontAwesome icons
 library.add(faExternalLinkAlt);
@@ -23,7 +24,8 @@ library.add(faUserCircle);
     AppComponent,
     NavBarComponent,
     HomeComponent,
-    AlertsComponent
+    AlertsComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,

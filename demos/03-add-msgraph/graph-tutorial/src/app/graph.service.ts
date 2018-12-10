@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Client } from '@microsoft/microsoft-graph-client';
 
 import { AuthService } from './auth.service';
+import { Event } from './event';
+import { AlertsService } from './alerts.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +11,15 @@ import { AuthService } from './auth.service';
 export class GraphService {
 
   private graphClient: Client;
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private alertsService: AlertsService) {
 
     // Initialize the Graph client
     this.graphClient = Client.init({
       authProvider: async (done) => {
         // Get the token from the auth service
-        let token = await authService.getAccessToken()
+        let token = await this.authService.getAccessToken()
           .catch((reason) => {
             done(reason, null);
           });
@@ -30,7 +34,17 @@ export class GraphService {
     });
   }
 
-  async getUser(): Promise<any> {
-    return this.graphClient.api('/me').get();
+  async getEvents(): Promise<Event[]> {
+    try {
+      let result =  await this.graphClient
+        .api('/me/events')
+        .select('subject,organizer,start,end')
+        .orderby('createdDateTime DESC')
+        .get();
+
+      return result.value;
+    } catch (error) {
+      this.alertsService.add('Could not get events', JSON.stringify(error, null, 2));
+    }
   }
 }

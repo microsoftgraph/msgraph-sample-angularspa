@@ -285,6 +285,14 @@ this.user.email = user.mail || user.userPrincipalName;
 
 This new code uses the Microsoft Graph SDK to get the user's details, then creates a `User` object using values returned by the API call.
 
+Finally, remove the temporary code from the `HomeComponent` class. Open the `./src/app/home/home.component.ts` file and replace the existing `signIn` function with the following.
+
+```ts
+async signIn(): Promise<void> {
+  await this.authService.signIn();
+}
+```
+
 Now if you save your changes and start the app, after sign-in you should end up back on the home page, but the UI should change to indicate that you are signed-in.
 
 ![A screenshot of the home page after signing in](./images/add-aad-auth-01.png)
