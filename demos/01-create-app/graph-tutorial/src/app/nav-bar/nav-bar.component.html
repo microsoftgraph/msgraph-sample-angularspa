@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <div class="container">
+    <a routerLink="/" class="navbar-brand">Angular Graph Tutorial</a>
+    <button class="navbar-toggler" type="button" (click)="toggleNavBar()" [attr.aria-expanded]="showNav"
+    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [class.show]="showNav" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a routerLink="/" class="nav-link" routerLinkActive="active">Home</a>
+        </li>
+        <li *ngIf="authenticated" class="nav-item">
+          <a routerLink="/calendar" class="nav-link" routerLinkActive="active">Calendar</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link" href="https://docs.microsoft.com/graph/overview" target="_blank">
+            <fa-icon [icon]="[ 'fas', 'external-link-alt' ]" class="mr-1"></fa-icon>Docs
+          </a>
+        </li>
+        <li *ngIf="authenticated" ngbDropdown placement="bottom-right" class="nav-item">
+          <a ngbDropdownToggle id="userMenu" class="nav-link" href="javascript:undefined" role="button" aria-haspopup="true"
+            aria-expanded="false">
+            <div *ngIf="user.avatar; then userAvatar else defaultAvatar"></div>
+            <ng-template #userAvatar>
+              <img src="user.avatar" class="rounded-circle align-self-center mr-2" style="width: 32px;">
+            </ng-template>
+            <ng-template #defaultAvatar>
+              <fa-icon [icon]="[ 'far', 'user-circle' ]" fixedWidth="true" size="lg"
+                class="rounded-circle align-self-center mr-2"></fa-icon>
+            </ng-template>
+          </a>
+          <div ngbDropdownMenu aria-labelledby="userMenu">
+            <h5 class="dropdown-item-text mb-0">{{user.displayName}}</h5>
+            <p class="dropdown-item-text text-muted mb-0">{{user.email}}</p>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:undefined" role="button" (click)="signOut()">Sign Out</a>
+          </div>
+        </li>
+        <li *ngIf="!authenticated" class="nav-item">
+          <a class="nav-link" href="javascript:undefined" role="button" (click)="signIn()">Sign In</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

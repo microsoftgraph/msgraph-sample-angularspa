@@ -1,0 +1,12 @@
+<div class="jumbotron">
+  <h1>Angular Graph Tutorial</h1>
+  <p class="lead">This sample app shows how to use the Microsoft Graph API from Angular</p>
+  <div *ngIf="authService.authenticated; then welcomeUser else signInPrompt"></div>
+  <ng-template #welcomeUser>
+    <h4>Welcome {{ authService.user.displayName }}!</h4>
+    <p>Use the navigation bar at the top of the page to get started.</p>
+  </ng-template>
+  <ng-template #signInPrompt>
+    <a href="javascript:undefined" class="btn btn-primary btn-large" role="button" (click)="signIn()">Click here to sign in</a>
+  </ng-template>
+</div>
