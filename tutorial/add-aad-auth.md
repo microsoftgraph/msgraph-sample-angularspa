@@ -243,6 +243,43 @@ Right now the authentication service sets constant values for the user's display
 import { Client } from '@microsoft/microsoft-graph-client';
 ```
 
+Add a new function to the `AuthService` class called `getUser`.
+
+```ts
+private async getUser(): Promise<User> {
+  if (!this.authenticated) return null;
+
+  let graphClient = Client.init({
+    // Initialize the Graph client with an auth
+    // provider that requests the token from the
+    // auth service
+    authProvider: async(done) => {
+      let token = await this.getAccessToken()
+        .catch((reason) => {
+          done(reason, null);
+        })
+
+      if (token)
+      {
+        done(null, token);
+      } else {
+        done("Could not get an access token", null);
+      }
+    }
+  });
+
+  // Get the user from Graph (GET /me)
+  let graphUser = await graphClient.api('/me').get();
+
+  let user = new User();
+  user.displayName = graphUser.displayName;
+  // Prefer the mail property, but fall back to userPrincipalName
+  user.email = graphUser.mail || graphUser.userPrincipalName;
+
+  return user;
+}
+```
+
 Locate and remove the following code from the `signIn` method.
 
 ```ts
@@ -255,35 +292,22 @@ this.user.email = "AdeleV@contoso.com";
 In its place, add the following code.
 
 ```ts
-let graphClient = Client.init({
-  // Initialize the Graph client with an auth
-  // provider that requests the token from the
-  // auth service
-  authProvider: async(done) => {
-    let token = await this.getAccessToken()
-      .catch((reason) => {
-        done(reason, null);
-      })
-
-    if (token)
-    {
-      done(null, token);
-    } else {
-      done("Could not get an access token", null);
-    }
-  }
-});
-
-// Get the user from Graph (GET /me)
-let user = await graphClient.api('/me').get();
-
-this.user = new User();
-this.user.displayName = user.displayName;
-// Prefer the mail property, but fall back to userPrincipalName
-this.user.email = user.mail || user.userPrincipalName;
+this.user = await this.getUser();
 ```
 
 This new code uses the Microsoft Graph SDK to get the user's details, then creates a `User` object using values returned by the API call.
+
+Now change the `constructor` for the `AuthService` class to check if the user is already logged in and load their details if so. Replace the existing `constructor` with the following.
+
+```ts
+constructor(
+  private msalService: MsalService,
+  private alertsService: AlertsService) {
+
+  this.authenticated = this.msalService.getUser() != null;
+  this.getUser().then((user) => {this.user = user});
+}
+```
 
 Finally, remove the temporary code from the `HomeComponent` class. Open the `./src/app/home/home.component.ts` file and replace the existing `signIn` function with the following.
 

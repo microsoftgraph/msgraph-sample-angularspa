@@ -17,8 +17,8 @@ export class AuthService {
     private msalService: MsalService,
     private alertsService: AlertsService) {
 
-    this.authenticated = false;
-    this.user = null;
+    this.authenticated = this.msalService.getUser() != null;
+    this.getUser().then((user) => {this.user = user});
   }
 
   // Prompt the user to sign in and
@@ -31,33 +31,7 @@ export class AuthService {
 
     if (result) {
       this.authenticated = true;
-
-      let graphClient = Client.init({
-        // Initialize the Graph client with an auth
-        // provider that requests the token from the
-        // auth service
-        authProvider: async(done) => {
-          let token = await this.getAccessToken()
-            .catch((reason) => {
-              done(reason, null);
-            })
-
-          if (token)
-          {
-            done(null, token);
-          } else {
-            done("Could not get an access token", null);
-          }
-        }
-      });
-
-      // Get the user from Graph (GET /me)
-      let user = await graphClient.api('/me').get();
-
-      this.user = new User();
-      this.user.displayName = user.displayName;
-      // Prefer the mail property, but fall back to userPrincipalName
-      this.user.email = user.mail || user.userPrincipalName;
+      this.user = await this.getUser();
     }
   }
 
@@ -76,5 +50,38 @@ export class AuthService {
       });
 
     return result;
+  }
+
+  private async getUser(): Promise<User> {
+    if (!this.authenticated) return null;
+
+    let graphClient = Client.init({
+      // Initialize the Graph client with an auth
+      // provider that requests the token from the
+      // auth service
+      authProvider: async(done) => {
+        let token = await this.getAccessToken()
+          .catch((reason) => {
+            done(reason, null);
+          })
+
+        if (token)
+        {
+          done(null, token);
+        } else {
+          done("Could not get an access token", null);
+        }
+      }
+    });
+
+    // Get the user from Graph (GET /me)
+    let graphUser = await graphClient.api('/me').get();
+
+    let user = new User();
+    user.displayName = graphUser.displayName;
+    // Prefer the mail property, but fall back to userPrincipalName
+    user.email = graphUser.mail || graphUser.userPrincipalName;
+
+    return user;
   }
 }
