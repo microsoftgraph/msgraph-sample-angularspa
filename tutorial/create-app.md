@@ -173,7 +173,7 @@ Open the `./src/app/nav-bar/nav-bar.component.html` file and replace its content
           </a>
         </li>
         <li *ngIf="authenticated" ngbDropdown placement="bottom-right" class="nav-item">
-          <a ngbDropdownToggle id="userMenu" class="nav-link" href="#" role="button" aria-haspopup="true"
+          <a ngbDropdownToggle id="userMenu" class="nav-link" href="javascript:undefined" role="button" aria-haspopup="true"
             aria-expanded="false">
             <div *ngIf="user.avatar; then userAvatar else defaultAvatar"></div>
             <ng-template #userAvatar>

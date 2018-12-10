@@ -21,7 +21,7 @@
           </a>
         </li>
         <li *ngIf="authService.authenticated" ngbDropdown placement="bottom-right" class="nav-item">
-          <a ngbDropdownToggle id="userMenu" class="nav-link" href="#" role="button" aria-haspopup="true"
+          <a ngbDropdownToggle id="userMenu" class="nav-link" href="javascript:undefined" role="button" aria-haspopup="true"
             aria-expanded="false">
             <div *ngIf="authService.user.avatar; then userAvatar else defaultAvatar"></div>
             <ng-template #userAvatar>
