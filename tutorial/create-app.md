@@ -64,7 +64,7 @@ body {
 
 Next, add the Bootstrap and FontAwesome modules to the app. Open `./src/app/app.module.ts` and add the following `import` statements to the top of the file.
 
-```ts
+```TypeScript
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
