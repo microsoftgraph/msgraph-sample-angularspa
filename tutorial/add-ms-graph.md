@@ -6,7 +6,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
 Start by creating an `Event` class that defines the fields that the app will display. Create a new file in the `./src/app` directory called `event.ts` and add the following code.
 
-```ts
+```TypeScript
 // For a full list of fields, see
 // https://docs.microsoft.com/graph/api/resources/event?view=graph-rest-1.0
 export class Event {
@@ -42,7 +42,7 @@ ng generate service graph
 
 Once the command completes, open the `./src/app/graph.service.ts` file and replace its contents with the following.
 
-```ts
+```TypeScript
 import { Injectable } from '@angular/core';
 import { Client } from '@microsoft/microsoft-graph-client';
 
@@ -111,7 +111,7 @@ ng generate component calendar
 
 Once the command completes, add the component to the `routes` array in `./src/app/app-routing.module.ts`.
 
-```ts
+```TypeScript
 import { CalendarComponent } from './calendar/calendar.component';
 
 const routes: Routes = [
@@ -122,7 +122,7 @@ const routes: Routes = [
 
 Open the `./src/app/calendar/calendar.component.ts` file and replace its contents with the following.
 
-```ts
+```TypeScript
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment-timezone';
 
@@ -160,7 +160,7 @@ For now this just renders the array of events in JSON on the page. Save your cha
 
 Now you can update the `CalendarComponent` component to display the events in a more user-friendly manner. First, remove the temporary code that adds an alert from the `ngOnInit` function. Your updated function should look like this.
 
-```ts
+```TypeScript
 ngOnInit() {
   this.graphService.getEvents()
     .then((events) => {
@@ -171,7 +171,7 @@ ngOnInit() {
 
 Now add a function to the `CalendarComponent` class to format a `DateTimeTimeZone` object into an ISO string.
 
-```ts
+```TypeScript
 formatDateTimeTimeZone(dateTime: DateTimeTimeZone): string {
   try {
     return moment.tz(dateTime.dateTime, dateTime.timeZone).format();

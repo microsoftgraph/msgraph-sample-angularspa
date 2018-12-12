@@ -4,7 +4,7 @@ In this exercise you will extend the application from the previous exercise to s
 
 Create a new file in the `./src` directory named `oauth.ts` and add the following code.
 
-```ts
+```TypeScript
 export const OAuthSettings = {
   appId: 'YOUR_APP_ID_HERE',
   scopes: [
@@ -21,14 +21,14 @@ Replace `YOUR_APP_ID_HERE` with the application ID from the Application Registra
 
 Open `./src/app/app.module.ts` and add the following `import` statements to the top of the file.
 
-```ts
+```TypeScript
 import { MsalModule } from '@azure/msal-angular';
 import { OAuthSettings } from '../oauth';
 ```
 
 Then add the `MsalModule` to the `imports` array inside the `@NgModule` declaration, and initialize it with the app ID.
 
-```ts
+```TypeScript
 imports: [
   BrowserModule,
   AppRoutingModule,
@@ -44,7 +44,7 @@ imports: [
 
 Start by defining a simple `User` class to hold the information about the user that the app displays. Create a new file in the `./src/app` folder named `user.ts` and add the following code.
 
-```ts
+```TypeScript
 export class User {
   displayName: string;
   email: string;
@@ -60,7 +60,7 @@ ng generate service auth
 
 Once the command finishes, open the `./src/app/auth.service.ts` file and replace its contents with the following code.
 
-```ts
+```TypeScript
 import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 
@@ -128,7 +128,7 @@ Now that you have the authentication service, it can be injected into the compon
 - Inject the `AuthService` by adding the following parameter to the `constructor`: `private authService: AuthService`.
 - Replace the existing `signIn` method with the following:
 
-    ```ts
+    ```TypeScript
     async signIn(): Promise<void> {
       await this.authService.signIn();
     }
@@ -136,7 +136,7 @@ Now that you have the authentication service, it can be injected into the compon
 
 - Replace the existing `signOut` method with the following:
 
-    ```ts
+    ```TypeScript
     signOut(): void {
       this.authService.signOut();
     }
@@ -144,7 +144,7 @@ Now that you have the authentication service, it can be injected into the compon
 
 When you're done, the code should look like the following.
 
-```ts
+```TypeScript
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
@@ -191,7 +191,7 @@ Next update the `HomeComponent` class. Make all of the same changes in `./src/ap
 - There is no `signOut` method in the `HomeComponent` class.
 - Replace the `signIn` method with a slightly different version. This code calls `getAccessToken` to get an access token, which, for now, will output the token as an error.
 
-    ```ts
+    ```TypeScript
     async signIn(): Promise<void> {
       await this.authService.signIn();
 
@@ -204,7 +204,7 @@ Next update the `HomeComponent` class. Make all of the same changes in `./src/ap
 
 When your done, the file should look like the following.
 
-```ts
+```TypeScript
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 
@@ -239,13 +239,13 @@ Save your changes and refresh the browser. Click the **Click here to sign in** b
 
 Right now the authentication service sets constant values for the user's display name and email address. Now that you have an access token, you can get user details from Microsoft Graph so those values correspond to the current user. Open `./src/app/auth.service.ts` and add the following `import` statement to the top of the file.
 
-```ts
+```TypeScript
 import { Client } from '@microsoft/microsoft-graph-client';
 ```
 
 Add a new function to the `AuthService` class called `getUser`.
 
-```ts
+```TypeScript
 private async getUser(): Promise<User> {
   if (!this.authenticated) return null;
 
@@ -282,7 +282,7 @@ private async getUser(): Promise<User> {
 
 Locate and remove the following code from the `signIn` method.
 
-```ts
+```TypeScript
 // Temporary placeholder
 this.user = new User();
 this.user.displayName = "Adele Vance";
@@ -291,7 +291,7 @@ this.user.email = "AdeleV@contoso.com";
 
 In its place, add the following code.
 
-```ts
+```TypeScript
 this.user = await this.getUser();
 ```
 
@@ -299,7 +299,7 @@ This new code uses the Microsoft Graph SDK to get the user's details, then creat
 
 Now change the `constructor` for the `AuthService` class to check if the user is already logged in and load their details if so. Replace the existing `constructor` with the following.
 
-```ts
+```TypeScript
 constructor(
   private msalService: MsalService,
   private alertsService: AlertsService) {
@@ -311,7 +311,7 @@ constructor(
 
 Finally, remove the temporary code from the `HomeComponent` class. Open the `./src/app/home/home.component.ts` file and replace the existing `signIn` function with the following.
 
-```ts
+```TypeScript
 async signIn(): Promise<void> {
   await this.authService.signIn();
 }

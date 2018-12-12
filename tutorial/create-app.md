@@ -46,7 +46,7 @@ npm install @azure/msal-angular@0.1.2 rxjs-compat@6.3.3 @microsoft/microsoft-gra
 
 Start by adding the Bootstrap CSS files to the app, as well as some global styles. Open the `./src/styles.css` and add the following lines.
 
-```css
+```CSS
 @import "~bootstrap/dist/css/bootstrap.css";
 
 /* Add padding for the nav bar */
@@ -74,14 +74,14 @@ import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 
 Then add the following code after all of the `import` statements.
 
-```ts
+```TypeScript
 library.add(faExternalLinkAlt);
 library.add(faUserCircle);
 ```
 
 In the `@NgModule` declaration, replace the existing `imports` array with the following.
 
-```ts
+```TypeScript
 imports: [
   BrowserModule,
   AppRoutingModule
@@ -99,7 +99,7 @@ ng generate component nav-bar
 
 Once the command completes, open the `./src/app/nav-bar/nav-bar.component.ts` file and replace its contents with the following.
 
-```ts
+```TypeScript
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -208,7 +208,7 @@ ng generate component home
 
 Once the command completes, open the `./src/app/home/home.component.ts` file and replace its contents with the following.
 
-```ts
+```TypeScript
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -260,7 +260,7 @@ Then open the `./src/app/home/home.component.html` file and replace its contents
 
 Now create an alert service that the app can use to display messages to the user. Start by creating a simple `Alert` class. Create a new file in the `./src/app` directory named `alert.ts` and add the following code.
 
-```ts
+```TypeScript
 export class Alert {
   message: string;
   debug: string;
@@ -275,7 +275,7 @@ ng generate service alerts
 
 Open the `./src/app/alerts.service.ts` file and replace its contents with the following.
 
-```ts
+```TypeScript
 import { Injectable } from '@angular/core';
 import { Alert } from './alert';
 
@@ -304,7 +304,7 @@ ng generate component alerts
 
 Once the command completes, open the `./src/app/alerts/alerts.component.ts` file and replace its contents with the following.
 
-```ts
+```TypeScript
 import { Component, OnInit } from '@angular/core';
 import { AlertsService } from '../alerts.service';
 import { Alert } from '../alert';
@@ -340,7 +340,7 @@ Then open the `./src/app/alerts/alerts.component.html` file and replace its cont
 
 Now with those basic components defined, update the app to use them. First, open the `./src/app/app-routing.module.ts` file and replace the `const routes: Routes = [];` line with the following code.
 
-```ts
+```TypeScript
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
