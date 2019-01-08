@@ -23,8 +23,8 @@ export class HomeComponent implements OnInit {
     // Temporary
     this.authenticated = true;
     this.user = {
-      displayName: "Adele Vance",
-      email: "adelev@contoso.com"
+      displayName: 'Adele Vance',
+      email: 'adelev@contoso.com'
     };
   }
 }
