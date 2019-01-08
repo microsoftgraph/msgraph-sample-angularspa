@@ -63,7 +63,7 @@ export class AuthService {
         let token = await this.getAccessToken()
           .catch((reason) => {
             done(reason, null);
-          })
+          });
 
         if (token)
         {
