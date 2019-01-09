@@ -257,7 +257,7 @@ private async getUser(): Promise<User> {
       let token = await this.getAccessToken()
         .catch((reason) => {
           done(reason, null);
-        })
+        });
 
       if (token)
       {
