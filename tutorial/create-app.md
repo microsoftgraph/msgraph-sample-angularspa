@@ -36,10 +36,10 @@ Before moving on, install some additional packages that you will use later:
 Run the following command in your CLI.
 
 ```Shell
-npm install bootstrap@4.1.3 @fortawesome/angular-fontawesome@0.3.0 @fortawesome/fontawesome-svg-core@1.2.8
-npm install @fortawesome/free-regular-svg-icons@5.5.0 @fortawesome/free-solid-svg-icons@5.5.0
-npm install moment@2.22.2 moment-timezone@0.5.23 @ng-bootstrap/ng-bootstrap@4.0.0
-npm install @azure/msal-angular@0.1.2 rxjs-compat@6.3.3 @microsoft/microsoft-graph-client@1.3.0
+npm install bootstrap@4.3.1 @fortawesome/angular-fontawesome@0.3.0 @fortawesome/fontawesome-svg-core@1.2.15
+npm install @fortawesome/free-regular-svg-icons@5.7.2 @fortawesome/free-solid-svg-icons@5.7.2
+npm install moment@2.24.0 moment-timezone@0.5.23 @ng-bootstrap/ng-bootstrap@4.1.0
+npm install @azure/msal-angular@0.1.2 rxjs-compat@6.4.0 @microsoft/microsoft-graph-client@1.4.0
 ```
 
 ## Design the app
