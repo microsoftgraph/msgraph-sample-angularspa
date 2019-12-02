@@ -33,7 +33,7 @@ export class NavBarComponent implements OnInit {
     this.authenticated = true;
     this.user = {
       displayName: 'Adele Vance',
-      email: 'adelev@contoso.com'
+      email: 'AdeleV@contoso.com'
     };
   }
 
