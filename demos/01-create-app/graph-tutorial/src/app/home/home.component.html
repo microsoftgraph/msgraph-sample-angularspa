@@ -3,7 +3,7 @@
   <p class="lead">This sample app shows how to use the Microsoft Graph API from Angular</p>
   <div *ngIf="authenticated; then welcomeUser else signInPrompt"></div>
   <ng-template #welcomeUser>
-    <h4>Welcome {{ user.displayName }}!</h4>
+    <h4 *ngIf="user">Welcome {{ user.displayName }}!</h4 >
     <p>Use the navigation bar at the top of the page to get started.</p>
   </ng-template>
   <ng-template #signInPrompt>

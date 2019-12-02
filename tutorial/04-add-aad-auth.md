@@ -280,6 +280,13 @@ private async getUser(): Promise<User> {
 }
 ```
 
+Locate and remove the following code in the `getAccessToken` method that adds an alert to display the access token.
+
+```TypeScript
+// Temporary to display token in an error box
+if (result) this.alertsService.add('Token acquired', result);
+```
+
 Locate and remove the following code from the `signIn` method.
 
 ```TypeScript
