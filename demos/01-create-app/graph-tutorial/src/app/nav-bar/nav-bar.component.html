@@ -23,7 +23,7 @@
         <li *ngIf="authenticated" ngbDropdown placement="bottom-right" class="nav-item">
           <a ngbDropdownToggle id="userMenu" class="nav-link" href="javascript:undefined" role="button" aria-haspopup="true"
             aria-expanded="false">
-            <div *ngIf="user.avatar; then userAvatar else defaultAvatar"></div>
+            <div *ngIf="user && user.avatar; then userAvatar else defaultAvatar"></div>
             <ng-template #userAvatar>
               <img src="user.avatar" class="rounded-circle align-self-center mr-2" style="width: 32px;">
             </ng-template>
@@ -33,8 +33,8 @@
             </ng-template>
           </a>
           <div ngbDropdownMenu aria-labelledby="userMenu">
-            <h5 class="dropdown-item-text mb-0">{{user.displayName}}</h5>
-            <p class="dropdown-item-text text-muted mb-0">{{user.email}}</p>
+            <h5 *ngIf="user" class="dropdown-item-text mb-0">{{user.displayName}}</h5>
+            <p *ngIf="user" class="dropdown-item-text text-muted mb-0">{{user.email}}</p>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:undefined" role="button" (click)="signOut()">Sign Out</a>
           </div>

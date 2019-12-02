@@ -26,10 +26,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('graph-tutorial');
   });
 
-  it('should render title in a h1 tag', () => {
+  it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to graph-tutorial!');
+    expect(compiled.querySelector('.content span').textContent).toContain('graph-tutorial app is running!');
   });
 });
