@@ -1,26 +1,30 @@
 <!-- markdownlint-disable MD002 MD041 -->
 
-Open your command-line interface (CLI), navigate to a directory where you have rights to create files, and run the following commands to install the [Angular CLI](https://www.npmjs.com/package/@angular/cli) tool and create a new Angular app.
+In this section, you'll create a new Angular project and implement the UI for the application.
 
-```Shell
-npm install -g @angular/cli
-ng new graph-tutorial
-```
+1. Open your command-line interface (CLI), navigate to a directory where you have rights to create files, and run the following commands to install the [Angular CLI](https://www.npmjs.com/package/@angular/cli) tool and create a new Angular app.
 
-The Angular CLI will prompt for more information. Answer the prompts as follows.
+    ```Shell
+    npm install -g @angular/cli@9.0.6
+    ng new graph-tutorial
+    ```
 
-```Shell
-? Would you like to add Angular routing? Yes
-? Which stylesheet format would you like to use? CSS
-```
+1. The Angular CLI will prompt for more information. Answer the prompts as follows.
 
-Once the command finishes, change to the `graph-tutorial` directory in your CLI and run the following command to start a local web server.
+    ```Shell
+    ? Would you like to add Angular routing? Yes
+    ? Which stylesheet format would you like to use? CSS
+    ```
 
-```Shell
-ng serve --open
-```
+1. Once the command finishes, change to the `graph-tutorial` directory in your CLI and run the following command to start a local web server.
 
-Your default browser opens to [https://localhost:4200/](https://localhost:4200) with a default Angular page. If your browser doesn't open, open it and browse to [https://localhost:4200/](https://localhost:4200) to verify that the new app works.
+    ```Shell
+    ng serve --open
+    ```
+
+1. Your default browser opens to [https://localhost:4200/](https://localhost:4200) with a default Angular page. If your browser doesn't open, open it and browse to [https://localhost:4200/](https://localhost:4200) to verify that the new app works.
+
+## Add Node packages
 
 Before moving on, install some additional packages that you will use later:
 
@@ -30,17 +34,22 @@ Before moving on, install some additional packages that you will use later:
 - [fontawesome-svg-core](https://github.com/FortAwesome/Font-Awesome), [free-regular-svg-icons](https://github.com/FortAwesome/Font-Awesome), and [free-solid-svg-icons](https://github.com/FortAwesome/Font-Awesome) for the FontAwesome icons used in the sample.
 - [moment](https://github.com/moment/moment) for formatting dates and times.
 - [msal-angular](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-angular/README.md) for authenticating to Azure Active Directory and retrieving access tokens.
-- [rxjs-compat](https://github.com/ReactiveX/rxjs/tree/master/compat), required for the `msal-angular` package.
 - [microsoft-graph-client](https://github.com/microsoftgraph/msgraph-sdk-javascript) for making calls to Microsoft Graph.
 
-Run the following command in your CLI.
+1. Run the following commands in your CLI.
 
-```Shell
-npm install bootstrap@4.4.1 @fortawesome/angular-fontawesome@0.5.0 @fortawesome/fontawesome-svg-core@1.2.25
-npm install @fortawesome/free-regular-svg-icons@5.11.2 @fortawesome/free-solid-svg-icons@5.11.2
-npm install moment@2.24.0 moment-timezone@0.5.27 @ng-bootstrap/ng-bootstrap@5.1.4
-npm install @azure/msal-angular@0.1.4 rxjs-compat@6.5.3 @microsoft/microsoft-graph-client@2.0.0
-```
+    ```Shell
+    npm install bootstrap@4.4.1 @fortawesome/angular-fontawesome@0.6.0 @fortawesome/fontawesome-svg-core@1.2.27
+    npm install @fortawesome/free-regular-svg-icons@5.12.1 @fortawesome/free-solid-svg-icons@5.12.1
+    npm install moment@2.24.0 moment-timezone@0.5.28 @ng-bootstrap/ng-bootstrap@6.0.0
+    npm install @azure/msal-angular@1.0.0-beta.4 @microsoft/microsoft-graph-client@2.0.0
+    ```
+
+1. Run the following command in your CLI to add the Angular localization package (required by ng-bootstrap).
+
+    ```Shell
+    ng add @angular/localize
+    ```
 
 ## Design the app
 
@@ -53,41 +62,47 @@ Start by adding the Bootstrap CSS files to the app, as well as some global style
 body {
   padding-top: 4.5rem;
 }
-
-/* Style debug info in alerts */
-.alert-pre {
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
-}
 ```
 
-Next, add the Bootstrap and FontAwesome modules to the app. Open `./src/app/app.module.ts` and add the following `import` statements to the top of the file.
+Next, add the Bootstrap and FontAwesome modules to the app. Open `./src/app/app.module.ts` and replace its contents with the following.
 
 ```TypeScript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
-```
 
-Then add the following code after all of the `import` statements.
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { HomeComponent } from './home/home.component';
+import { AlertsComponent } from './alerts/alerts.component';
 
-```TypeScript
-library.add(faExternalLinkAlt);
-library.add(faUserCircle);
-```
-
-In the `@NgModule` declaration, replace the existing `imports` array with the following.
-
-```TypeScript
-imports: [
-  BrowserModule,
-  AppRoutingModule,
-  NgbModule,
-  FontAwesomeModule
-]
+@NgModule({
+  declarations: [
+    AppComponent,
+    NavBarComponent,
+    HomeComponent,
+    AlertsComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    FontAwesomeModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {
+  constructor(library: FaIconLibrary) {
+    // Register the FontAwesome icons used by the app
+    library.addIcons(faExternalLinkAlt, faUserCircle);
+  }
+ }
 ```
 
 Now generate an Angular component for the top navigation on the page. In your CLI, run the following command.
@@ -168,11 +183,11 @@ Open the `./src/app/nav-bar/nav-bar.component.html` file and replace its content
       <ul class="navbar-nav justify-content-end">
         <li class="nav-item">
           <a class="nav-link" href="https://docs.microsoft.com/graph/overview" target="_blank">
-            <fa-icon [icon]="[ 'fas', 'external-link-alt' ]" class="mr-1"></fa-icon>Docs
+            <fa-icon icon="external-link-alt" class="mr-1"></fa-icon>Docs
           </a>
         </li>
         <li *ngIf="authenticated" ngbDropdown placement="bottom-right" class="nav-item">
-          <a ngbDropdownToggle id="userMenu" class="nav-link" href="javascript:undefined" role="button" aria-haspopup="true"
+          <a ngbDropdownToggle id="userMenu" class="nav-link" role="button" aria-haspopup="true"
             aria-expanded="false">
             <div *ngIf="user.avatar; then userAvatar else defaultAvatar"></div>
             <ng-template #userAvatar>
@@ -187,11 +202,11 @@ Open the `./src/app/nav-bar/nav-bar.component.html` file and replace its content
             <h5 class="dropdown-item-text mb-0">{{user.displayName}}</h5>
             <p class="dropdown-item-text text-muted mb-0">{{user.email}}</p>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:undefined" role="button" (click)="signOut()">Sign Out</a>
+            <button class="dropdown-item" role="button" (click)="signOut()">Sign Out</button>
           </div>
         </li>
         <li *ngIf="!authenticated" class="nav-item">
-          <a class="nav-link" href="javascript:undefined" role="button" (click)="signIn()">Sign In</a>
+          <button class="btn btn-link nav-link border-0" role="button" (click)="signIn()">Sign In</button>
         </li>
       </ul>
     </div>
@@ -252,7 +267,7 @@ Then open the `./src/app/home/home.component.html` file and replace its contents
     <p>Use the navigation bar at the top of the page to get started.</p>
   </ng-template>
   <ng-template #signInPrompt>
-    <a href="javascript:undefined" class="btn btn-primary btn-large" role="button" (click)="signIn()">Click here to sign in</a>
+    <button class="btn btn-primary btn-large" role="button" (click)="signIn()">Click here to sign in</button>
   </ng-template>
 </div>
 ```
@@ -332,7 +347,9 @@ Then open the `./src/app/alerts/alerts.component.html` file and replace its cont
 <div *ngFor="let alert of alertsService.alerts">
   <ngb-alert type="danger" (close)="close(alert)">
     <p>{{alert.message}}</p>
-    <pre *ngIf="alert.debug" class="alert-pre border bg-light p-2"><code>{{alert.debug}}</code></pre>
+    <pre *ngIf="alert.debug" class="alert-pre border bg-light p-2">
+      <code class="text-break text-wrap">{{alert.debug}}</code>
+    </pre>
   </ngb-alert>
 </div>
 ```
