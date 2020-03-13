@@ -64,6 +64,13 @@ In this section you'll create the user interface for the app.
     body {
       padding-top: 4.5rem;
     }
+
+    /* Style debug info in alerts */
+    .alert-pre {
+      word-wrap: break-word;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
     ```
 
 1. Add the Bootstrap and FontAwesome modules to the app. Open `./src/app/app.module.ts` and replace its contents with the following.
@@ -348,9 +355,7 @@ In this section you'll create the user interface for the app.
     <div *ngFor="let alert of alertsService.alerts">
       <ngb-alert type="danger" (close)="close(alert)">
         <p>{{alert.message}}</p>
-        <pre *ngIf="alert.debug" class="alert-pre border bg-light p-2">
-          <code class="text-break text-wrap">{{alert.debug}}</code>
-        </pre>
+        <pre *ngIf="alert.debug" class="alert-pre border bg-light p-2"><code class="text-break text-wrap">{{alert.debug}}</code></pre>
       </ngb-alert>
     </div>
     ```
