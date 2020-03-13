@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export class Alert {
-  message: string;
-  debug: string;
+export class User {
+  displayName: string;
+  email: string;
+  avatar: string;
 }

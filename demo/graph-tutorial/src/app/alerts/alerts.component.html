@@ -1,3 +1,6 @@
+<!-- Copyright (c) Microsoft Corporation.
+     Licensed under the MIT License. -->
+
 <div *ngFor="let alert of alertsService.alerts">
   <ngb-alert type="danger" (close)="close(alert)">
     <p>{{alert.message}}</p>

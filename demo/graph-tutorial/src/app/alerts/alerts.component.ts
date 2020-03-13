@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Component, OnInit } from '@angular/core';
 import { AlertsService } from '../alerts.service';
 import { Alert } from '../alert';

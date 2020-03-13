@@ -30,6 +30,7 @@
     "bootstrap": "^4.4.1",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
+    "msal": "^1.2.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

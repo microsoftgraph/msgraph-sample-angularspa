@@ -42,7 +42,7 @@ Before moving on, install some additional packages that you will use later:
     npm install bootstrap@4.4.1 @fortawesome/angular-fontawesome@0.6.0 @fortawesome/fontawesome-svg-core@1.2.27
     npm install @fortawesome/free-regular-svg-icons@5.12.1 @fortawesome/free-solid-svg-icons@5.12.1
     npm install moment@2.24.0 moment-timezone@0.5.28 @ng-bootstrap/ng-bootstrap@6.0.0
-    npm install @azure/msal-angular@1.0.0-beta.4 @microsoft/microsoft-graph-client@2.0.0
+    npm install msal@1.2.1 @azure/msal-angular@1.0.0-beta.4 @microsoft/microsoft-graph-client@2.0.0
     ```
 
 1. Run the following command in your CLI to add the Angular localization package (required by ng-bootstrap).
@@ -73,7 +73,6 @@ In this section you'll create the user interface for the app.
     import { NgModule } from '@angular/core';
     import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-    import { library } from '@fortawesome/fontawesome-svg-core';
     import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
     import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 
@@ -191,7 +190,7 @@ In this section you'll create the user interface for the app.
             <li *ngIf="authenticated" ngbDropdown placement="bottom-right" class="nav-item">
               <a ngbDropdownToggle id="userMenu" class="nav-link" role="button" aria-haspopup="true"
                 aria-expanded="false">
-                <div *ngIf="user.avatar; then userAvatar else defaultAvatar"></div>
+                <div *ngIf="user && user.avatar; then userAvatar else defaultAvatar"></div>
                 <ng-template #userAvatar>
                   <img src="user.avatar" class="rounded-circle align-self-center mr-2" style="width: 32px;">
                 </ng-template>
