@@ -25,6 +25,7 @@ import { CalendarComponent } from './calendar/calendar.component';
     AlertsComponent,
     CalendarComponent
   ],
+  // <imports>
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -36,6 +37,7 @@ import { CalendarComponent } from './calendar/calendar.component';
       }
     })
   ],
+  // </imports>
   providers: [],
   bootstrap: [AppComponent]
 })

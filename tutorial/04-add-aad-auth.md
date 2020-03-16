@@ -4,15 +4,7 @@ In this exercise you will extend the application from the previous exercise to s
 
 1. Create a new file in the `./src` directory named `oauth.ts` and add the following code.
 
-    ```TypeScript
-    export const OAuthSettings = {
-      appId: 'YOUR_APP_ID_HERE',
-      scopes: [
-        "user.read",
-        "calendars.read"
-      ]
-    };
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/oauth.ts.example":::
 
     Replace `YOUR_APP_ID_HERE` with the application ID from the Application Registration Portal.
 
@@ -28,35 +20,13 @@ In this exercise you will extend the application from the previous exercise to s
 
 1. Add the `MsalModule` to the `imports` array inside the `@NgModule` declaration, and initialize it with the app ID.
 
-    ```TypeScript
-    imports: [
-      BrowserModule,
-      AppRoutingModule,
-      NgbModule,
-      FontAwesomeModule,
-      MsalModule.forRoot({
-        auth: {
-          clientId: OAuthSettings.appId
-        }
-      })
-    ],
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="imports":::
 
 ## Implement sign-in
 
-Start by defining a simple `User` class to hold the information about the user that the app displays.
+In this section you'll create an authentication service and implement sign-in and sign-out.
 
-1. Create a new file in the `./src/app` folder named `user.ts` and add the following code.
-
-    ```TypeScript
-    export class User {
-      displayName: string;
-      email: string;
-      avatar: string;
-    }
-    ```
-
-1. Create an authentication service. Run the following command in your CLI.
+1. Run the following command in your CLI.
 
     ```Shell
     ng generate service auth
@@ -77,6 +47,7 @@ Start by defining a simple `User` class to hold the information about the user t
     @Injectable({
       providedIn: 'root'
     })
+
     export class AuthService {
       public authenticated: boolean;
       public user: User;
@@ -130,122 +101,13 @@ Start by defining a simple `User` class to hold the information about the user t
     }
     ```
 
-1. Open the `./src/app/nav-bar/nav-bar.component.ts` file and make the following changes.
+1. Open the `./src/app/nav-bar/nav-bar.component.ts` file and replace its contents with the following.
 
-    - Add `import { AuthService } from '../auth.service';` to the top of the file.
-    - Remove the `authenticated` and `user` properties from the class, and remove the code that sets them in `ngOnInit`.
-    - Inject the `AuthService` by adding the following parameter to the `constructor`: `public authService: AuthService`.
-    - Replace the existing `signIn` method with the following:
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/nav-bar/nav-bar.module.ts" id="navBarComponent" highlight="3,15-22,24,26-28,36-38,40-42":::
 
-        ```TypeScript
-        async signIn(): Promise<void> {
-          await this.authService.signIn();
-        }
-        ```
+1. Open`./src/app/home/home.component.ts` and replace its contents with the following.
 
-    - Replace the existing `signOut` method with the following:
-
-        ```TypeScript
-        signOut(): void {
-          this.authService.signOut();
-        }
-        ```
-
-    When you're done, the code should look like the following.
-
-    ```TypeScript
-    import { Component, OnInit } from '@angular/core';
-
-    import { AuthService } from '../auth.service';
-
-    @Component({
-      selector: 'app-nav-bar',
-      templateUrl: './nav-bar.component.html',
-      styleUrls: ['./nav-bar.component.css']
-    })
-    export class NavBarComponent implements OnInit {
-
-      // Should the collapsed nav show?
-      showNav: boolean;
-
-      constructor(public authService: AuthService) { }
-
-      ngOnInit() {
-        this.showNav = false;
-      }
-
-      // Used by the Bootstrap navbar-toggler button to hide/show
-      // the nav in a collapsed state
-      toggleNavBar(): void {
-        this.showNav = !this.showNav;
-      }
-
-      async signIn(): Promise<void> {
-        await this.authService.signIn();
-      }
-
-      signOut(): void {
-        this.authService.signOut();
-      }
-    }
-    ```
-
-1. Open `./src/app/nav-bar/nav-bar.component.html` and make the following changes.
-
-    - Replace all instances of `authenticated` with `authService.authenticated`.
-    - Replace all instance of `user` with `authService.user`.
-
-1. Open`./src/app/home/home.component.ts` and make the following changes.
-
-    - Add `import { AuthService } from '../auth.service';` to the top of the file.
-    - Remove the `authenticated` and `user` properties from the class, and remove the code that sets them in `ngOnInit`.
-    - Inject the `AuthService` by adding the following parameter to the `constructor`: `public authService: AuthService`.
-    - Replace the existing `signIn` method with the following:
-
-        ```TypeScript
-        async signIn(): Promise<void> {
-          await this.authService.signIn();
-
-          // Temporary to display the token
-          if (this.authService.authenticated) {
-            let token = await this.authService.getAccessToken();
-          }
-        }
-        ```
-
-    When your done, the file should look like the following.
-
-    ```TypeScript
-    import { Component, OnInit } from '@angular/core';
-
-    import { AuthService } from '../auth.service';
-
-    @Component({
-      selector: 'app-home',
-      templateUrl: './home.component.html',
-      styleUrls: ['./home.component.css']
-    })
-    export class HomeComponent implements OnInit {
-
-      constructor(public authService: AuthService) { }
-
-      ngOnInit() {}
-
-      async signIn(): Promise<void> {
-        await this.authService.signIn();
-
-        // Temporary to display the token
-        if (this.authService.authenticated) {
-          let token = await this.authService.getAccessToken();
-        }
-      }
-    }
-    ```
-
-1. Open `./src/app/home/home.component.html` and make the following changes.
-
-    - Replace all instances of `authenticated` with `authService.authenticated`.
-    - Replace all instance of `user` with `authService.user`.
+    :::code language="typescript" source="snippets/snippets.ts" id="homeComponent" highlight="3,12-19,21,23,25-27":::
 
 Save your changes and refresh the browser. Click the **Click here to sign in** button and you should be redirected to `https://login.microsoftonline.com`. Login with your Microsoft account and consent to the requested permissions. The app page should refresh, showing the token.
 
@@ -261,40 +123,7 @@ Right now the authentication service sets constant values for the user's display
 
 1. Add a new function to the `AuthService` class called `getUser`.
 
-    ```TypeScript
-    private async getUser(): Promise<User> {
-      if (!this.authenticated) return null;
-
-      let graphClient = Client.init({
-        // Initialize the Graph client with an auth
-        // provider that requests the token from the
-        // auth service
-        authProvider: async(done) => {
-          let token = await this.getAccessToken()
-            .catch((reason) => {
-              done(reason, null);
-            });
-
-          if (token)
-          {
-            done(null, token);
-          } else {
-            done("Could not get an access token", null);
-          }
-        }
-      });
-
-      // Get the user from Graph (GET /me)
-      let graphUser = await graphClient.api('/me').get();
-
-      let user = new User();
-      user.displayName = graphUser.displayName;
-      // Prefer the mail property, but fall back to userPrincipalName
-      user.email = graphUser.mail || graphUser.userPrincipalName;
-
-      return user;
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="getUser":::
 
 1. Locate and remove the following code in the `getAccessToken` method that adds an alert to display the access token.
 
@@ -322,23 +151,11 @@ Right now the authentication service sets constant values for the user's display
 
 1. Change the `constructor` for the `AuthService` class to check if the user is already logged in and load their details if so. Replace the existing `constructor` with the following.
 
-    ```TypeScript
-    constructor(
-      private msalService: MsalService,
-      private alertsService: AlertsService) {
-
-      this.authenticated = this.msalService.getAccount() != null;
-      this.getUser().then((user) => {this.user = user});
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="constructor" highlight="5-6":::
 
 1. Remove the temporary code from the `HomeComponent` class. Open the `./src/app/home/home.component.ts` file and replace the existing `signIn` function with the following.
 
-    ```TypeScript
-    async signIn(): Promise<void> {
-      await this.authService.signIn();
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="signIn" highlight="5-6":::
 
 Now if you save your changes and start the app, after sign-in you should end up back on the home page, but the UI should change to indicate that you are signed-in.
 

@@ -6,33 +6,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
 1. Create a new file in the `./src/app` directory called `event.ts` and add the following code.
 
-    ```TypeScript
-    // For a full list of fields, see
-    // https://docs.microsoft.com/graph/api/resources/event?view=graph-rest-1.0
-    export class Event {
-      subject: string;
-      organizer: Recipient;
-      start: DateTimeTimeZone;
-      end: DateTimeTimeZone;
-    }
-
-    // https://docs.microsoft.com/graph/api/resources/recipient?view=graph-rest-1.0
-    export class Recipient {
-      emailAddress: EmailAddress;
-    }
-
-    // https://docs.microsoft.com/graph/api/resources/emailaddress?view=graph-rest-1.0
-    export class EmailAddress {
-      name: string;
-      address: string;
-    }
-
-    // https://docs.microsoft.com/graph/api/resources/datetimetimezone?view=graph-rest-1.0
-    export class DateTimeTimeZone {
-      dateTime: string;
-      timeZone: string;
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/event.ts" id="eventClasses":::
 
 1. Add a new service to hold all of your Graph calls. Run the following command in your CLI.
 
@@ -44,58 +18,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
 1. Once the command completes, open the `./src/app/graph.service.ts` file and replace its contents with the following.
 
-    ```TypeScript
-    import { Injectable } from '@angular/core';
-    import { Client } from '@microsoft/microsoft-graph-client';
-
-    import { AuthService } from './auth.service';
-    import { Event } from './event';
-    import { AlertsService } from './alerts.service';
-
-    @Injectable({
-      providedIn: 'root'
-    })
-    export class GraphService {
-
-      private graphClient: Client;
-      constructor(
-        private authService: AuthService,
-        private alertsService: AlertsService) {
-
-        // Initialize the Graph client
-        this.graphClient = Client.init({
-          authProvider: async (done) => {
-            // Get the token from the auth service
-            let token = await this.authService.getAccessToken()
-              .catch((reason) => {
-                done(reason, null);
-              });
-
-            if (token)
-            {
-              done(null, token);
-            } else {
-              done("Could not get an access token", null);
-            }
-          }
-        });
-      }
-
-      async getEvents(): Promise<Event[]> {
-        try {
-          let result =  await this.graphClient
-            .api('/me/events')
-            .select('subject,organizer,start,end')
-            .orderby('createdDateTime DESC')
-            .get();
-
-          return result.value;
-        } catch (error) {
-          this.alertsService.add('Could not get events', JSON.stringify(error, null, 2));
-        }
-      }
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/graph.service.ts" id="graphService":::
 
     Consider what this code is doing.
 
@@ -164,49 +87,15 @@ Now you can update the `CalendarComponent` component to display the events in a 
 
 1. Remove the temporary code that adds an alert from the `ngOnInit` function. Your updated function should look like this.
 
-    ```TypeScript
-    ngOnInit() {
-      this.graphService.getEvents()
-        .then((events) => {
-          this.events = events;
-        });
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/calendar/calendar.component.ts" id="ngOnInit":::
 
 1. Add a function to the `CalendarComponent` class to format a `DateTimeTimeZone` object into an ISO string.
 
-    ```TypeScript
-    formatDateTimeTimeZone(dateTime: DateTimeTimeZone): string {
-      try {
-        return moment.tz(dateTime.dateTime, dateTime.timeZone).format();
-      }
-      catch(error) {
-        this.alertsService.add('DateTimeTimeZone conversion error', JSON.stringify(error));
-      }
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/calendar/calendar.component.ts" id="formatDateTimeTimeZone":::
 
 1. Open the `./src/app/calendar/calendar.component.html` file and replace its contents with the following.
 
-    ```html
-    <h1>Calendar</h1>
-    <table class="table">
-      <thead>
-        <th scope="col">Organizer</th>
-        <th scope="col">Subject</th>
-        <th scope="col">Start</th>
-        <th scope="col">End</th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let event of events">
-          <td>{{event.organizer.emailAddress.name}}</td>
-          <td>{{event.subject}}</td>
-          <td>{{formatDateTimeTimeZone(event.start) | date:'short' }}</td>
-          <td>{{formatDateTimeTimeZone(event.end) | date: 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
-    ```
+    :::code language="html" source="../demo/graph-tutorial/src/app/calendar/calendar.component.html" id="calendarHtml":::
 
 This loops through the collection of events and adds a table row for each one. Save the changes and restart the app. Click on the **Calendar** link and the app should now render a table of events.
 

@@ -1,6 +1,4 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
-
+// <homeComponent>
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
@@ -21,13 +19,17 @@ export class HomeComponent implements OnInit {
     return this.authService.user;
   }
 
-  constructor(private authService: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit() {}
 
-  // <signIn>
   async signIn(): Promise<void> {
     await this.authService.signIn();
+
+    // Temporary to display the token
+    if (this.authService.authenticated) {
+      let token = await this.authService.getAccessToken();
+    }
   }
-  // </signIn>
 }
+// </homeComponent>

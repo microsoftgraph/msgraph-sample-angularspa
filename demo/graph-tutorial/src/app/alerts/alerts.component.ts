@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// <alertComponent>
 import { Component, OnInit } from '@angular/core';
 import { AlertsService } from '../alerts.service';
 import { Alert } from '../alert';
@@ -21,3 +22,4 @@ export class AlertsComponent implements OnInit {
     this.alertsService.remove(alert);
   }
 }
+// </alertComponent>

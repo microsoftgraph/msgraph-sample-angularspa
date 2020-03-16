@@ -57,21 +57,7 @@ In this section you'll create the user interface for the app.
 
 1. Open the `./src/styles.css` and add the following lines.
 
-    ```css
-    @import "~bootstrap/dist/css/bootstrap.css";
-
-    /* Add padding for the nav bar */
-    body {
-      padding-top: 4.5rem;
-    }
-
-    /* Style debug info in alerts */
-    .alert-pre {
-      word-wrap: break-word;
-      word-break: break-all;
-      white-space: pre-wrap;
-    }
-    ```
+    :::code language="css" source="../demo/graph-tutorial/src/styles.css":::
 
 1. Add the Bootstrap and FontAwesome modules to the app. Open `./src/app/app.module.ts` and replace its contents with the following.
 
@@ -113,6 +99,10 @@ In this section you'll create the user interface for the app.
      }
     ```
 
+1. Create a new file in the `./src/app` folder named `user.ts` and add the following code.
+
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/user.ts" id="user":::
+
 1. Generate an Angular component for the top navigation on the page. In your CLI, run the following command.
 
     ```Shell
@@ -123,6 +113,8 @@ In this section you'll create the user interface for the app.
 
     ```TypeScript
     import { Component, OnInit } from '@angular/core';
+
+    import { User } from '../user';
 
     @Component({
       selector: 'app-nav-bar',
@@ -136,14 +128,14 @@ In this section you'll create the user interface for the app.
       // Is a user logged in?
       authenticated: boolean;
       // The user
-      user: any;
+      user: User;
 
       constructor() { }
 
       ngOnInit() {
         this.showNav = false;
         this.authenticated = false;
-        this.user = {};
+        this.user = null;
       }
 
       // Used by the Bootstrap navbar-toggler button to hide/show
@@ -157,70 +149,22 @@ In this section you'll create the user interface for the app.
         this.authenticated = true;
         this.user = {
           displayName: 'Adele Vance',
-          email: 'AdeleV@contoso.com'
+          email: 'AdeleV@contoso.com',
+          avatar: null
         };
       }
 
       signOut(): void {
         // Temporary
         this.authenticated = false;
-        this.user = {};
+        this.user = null;
       }
     }
     ```
 
 1. Open the `./src/app/nav-bar/nav-bar.component.html` file and replace its contents with the following.
 
-    ```html
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <div class="container">
-        <a routerLink="/" class="navbar-brand">Angular Graph Tutorial</a>
-        <button class="navbar-toggler" type="button" (click)="toggleNavBar()" [attr.aria-expanded]="showNav"
-        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" [class.show]="showNav" id="navbarCollapse">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a routerLink="/" class="nav-link" routerLinkActive="active">Home</a>
-            </li>
-            <li *ngIf="authenticated" class="nav-item">
-              <a routerLink="/calendar" class="nav-link" routerLinkActive="active">Calendar</a>
-            </li>
-          </ul>
-          <ul class="navbar-nav justify-content-end">
-            <li class="nav-item">
-              <a class="nav-link" href="https://docs.microsoft.com/graph/overview" target="_blank">
-                <fa-icon icon="external-link-alt" class="mr-1"></fa-icon>Docs
-              </a>
-            </li>
-            <li *ngIf="authenticated" ngbDropdown placement="bottom-right" class="nav-item">
-              <a ngbDropdownToggle id="userMenu" class="nav-link" role="button" aria-haspopup="true"
-                aria-expanded="false">
-                <div *ngIf="user && user.avatar; then userAvatar else defaultAvatar"></div>
-                <ng-template #userAvatar>
-                  <img src="user.avatar" class="rounded-circle align-self-center mr-2" style="width: 32px;">
-                </ng-template>
-                <ng-template #defaultAvatar>
-                  <fa-icon [icon]="[ 'far', 'user-circle' ]" fixedWidth="true" size="lg"
-                    class="rounded-circle align-self-center mr-2"></fa-icon>
-                </ng-template>
-              </a>
-              <div ngbDropdownMenu aria-labelledby="userMenu">
-                <h5 class="dropdown-item-text mb-0">{{user.displayName}}</h5>
-                <p class="dropdown-item-text text-muted mb-0">{{user.email}}</p>
-                <div class="dropdown-divider"></div>
-                <button class="dropdown-item" role="button" (click)="signOut()">Sign Out</button>
-              </div>
-            </li>
-            <li *ngIf="!authenticated" class="nav-item">
-              <button class="btn btn-link nav-link border-0" role="button" (click)="signIn()">Sign In</button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    ```
+    :::code language="html" source="../demo/graph-tutorial/src/app/nav-bar/nav-bar.component.html" id="navHtml":::
 
 1. Create a home page for the app. Run the following command in your CLI.
 
@@ -232,6 +176,8 @@ In this section you'll create the user interface for the app.
 
     ```TypeScript
     import { Component, OnInit } from '@angular/core';
+
+    import { User } from '../user';
 
     @Component({
       selector: 'app-home',
@@ -265,29 +211,11 @@ In this section you'll create the user interface for the app.
 
 1. Open the `./src/app/home/home.component.html` file and replace its contents with the following.
 
-    ```html
-    <div class="jumbotron">
-      <h1>Angular Graph Tutorial</h1>
-      <p class="lead">This sample app shows how to use the Microsoft Graph API from Angular</p>
-      <div *ngIf="authenticated; then welcomeUser else signInPrompt"></div>
-      <ng-template #welcomeUser>
-        <h4>Welcome {{ user.displayName }}!</h4>
-        <p>Use the navigation bar at the top of the page to get started.</p>
-      </ng-template>
-      <ng-template #signInPrompt>
-        <button class="btn btn-primary btn-large" role="button" (click)="signIn()">Click here to sign in</button>
-      </ng-template>
-    </div>
-    ```
+    :::code language="html" source="../demo/graph-tutorial/src/app/home/home.component.html" id="homeHtml":::
 
 1. Create a simple `Alert` class. Create a new file in the `./src/app` directory named `alert.ts` and add the following code.
 
-    ```TypeScript
-    export class Alert {
-      message: string;
-      debug: string;
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/alert.ts" id="alert":::
 
 1. Create an alert service that the app can use to display messages to the user. In your CLI, run the following command.
 
@@ -297,26 +225,7 @@ In this section you'll create the user interface for the app.
 
 1. Open the `./src/app/alerts.service.ts` file and replace its contents with the following.
 
-    ```TypeScript
-    import { Injectable } from '@angular/core';
-    import { Alert } from './alert';
-
-    @Injectable({
-      providedIn: 'root'
-    })
-    export class AlertsService {
-
-      alerts: Alert[] = [];
-
-      add(message: string, debug: string) {
-        this.alerts.push({message: message, debug: debug});
-      }
-
-      remove(alert: Alert) {
-        this.alerts.splice(this.alerts.indexOf(alert), 1);
-      }
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/alerts.service.ts" id="alertsService":::
 
 1. Generate an alerts component to display alerts. In your CLI, run the following command.
 
@@ -326,39 +235,11 @@ In this section you'll create the user interface for the app.
 
 1. Once the command completes, open the `./src/app/alerts/alerts.component.ts` file and replace its contents with the following.
 
-    ```TypeScript
-    import { Component, OnInit } from '@angular/core';
-    import { AlertsService } from '../alerts.service';
-    import { Alert } from '../alert';
-
-    @Component({
-      selector: 'app-alerts',
-      templateUrl: './alerts.component.html',
-      styleUrls: ['./alerts.component.css']
-    })
-    export class AlertsComponent implements OnInit {
-
-      constructor(private alertsService: AlertsService) { }
-
-      ngOnInit() {
-      }
-
-      close(alert: Alert) {
-        this.alertsService.remove(alert);
-      }
-    }
-    ```
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/alerts/alerts.component.ts" id="alertComponent":::
 
 1. Open the `./src/app/alerts/alerts.component.html` file and replace its contents with the following.
 
-    ```html
-    <div *ngFor="let alert of alertsService.alerts">
-      <ngb-alert type="danger" (close)="close(alert)">
-        <p>{{alert.message}}</p>
-        <pre *ngIf="alert.debug" class="alert-pre border bg-light p-2"><code class="text-break text-wrap">{{alert.debug}}</code></pre>
-      </ngb-alert>
-    </div>
-    ```
+    :::code language="html" source="../demo/graph-tutorial/src/app/alerts/alerts.component.html" id="alertHtml":::
 
 1. Open the `./src/app/app-routing.module.ts` file and replace the `const routes: Routes = [];` line with the following code.
 
@@ -372,13 +253,7 @@ In this section you'll create the user interface for the app.
 
 1. Open the `./src/app/app.component.html` file and replace its entire contents with the following.
 
-    ```html
-    <app-nav-bar></app-nav-bar>
-    <main role="main" class="container">
-      <app-alerts></app-alerts>
-      <router-outlet></router-outlet>
-    </main>
-    ```
+    :::code language="html" source="../demo/graph-tutorial/src/app/app.component.html" id="appHtml":::
 
 Save all of your changes and refresh the page. Now, the app should look very different.
 

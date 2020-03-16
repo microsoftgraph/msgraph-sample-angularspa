@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// <graphService>
 import { Injectable } from '@angular/core';
 import { Client } from '@microsoft/microsoft-graph-client';
 
@@ -51,3 +52,4 @@ export class GraphService {
     }
   }
 }
+// </graphService>

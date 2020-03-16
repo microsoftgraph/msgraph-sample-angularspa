@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// <navBarComponent>
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
+import { User } from '../user';
 
 @Component({
   selector: 'app-nav-bar',
@@ -14,8 +16,16 @@ export class NavBarComponent implements OnInit {
 
   // Should the collapsed nav show?
   showNav: boolean;
+  // Is a user logged in?
+  get authenticated(): boolean {
+    return this.authService.authenticated;
+  }
+  // The user
+  get user(): User {
+    return this.authService.user;
+  }
 
-  constructor(public authService: AuthService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
     this.showNav = false;
@@ -35,3 +45,4 @@ export class NavBarComponent implements OnInit {
     this.authService.signOut();
   }
 }
+// </navBarComponent>
