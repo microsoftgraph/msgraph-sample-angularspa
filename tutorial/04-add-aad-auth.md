@@ -103,7 +103,7 @@ In this section you'll create an authentication service and implement sign-in an
 
 1. Open the `./src/app/nav-bar/nav-bar.component.ts` file and replace its contents with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/nav-bar/nav-bar.component.ts" id="navBarComponent" highlight="3,15-22,24,26-28,36-38,40-42":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/nav-bar/nav-bar.component.ts" id="navBar" highlight="3,15-22,24,26-28,36-38,40-42":::
 
 1. Open`./src/app/home/home.component.ts` and replace its contents with the following.
 

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// <navBarComponent>
+// <navBar>
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
@@ -45,4 +45,4 @@ export class NavBarComponent implements OnInit {
     this.authService.signOut();
   }
 }
-// </navBarComponent>
+// </navBar>
