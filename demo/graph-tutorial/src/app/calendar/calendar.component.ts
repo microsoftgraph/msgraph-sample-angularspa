@@ -21,16 +21,16 @@ export class CalendarComponent implements OnInit {
     private graphService: GraphService,
     private alertsService: AlertsService) { }
 
-  // <ngOnInit>
+  // <ngOnInitSnippet>
   ngOnInit() {
     this.graphService.getEvents()
       .then((events) => {
         this.events = events;
       });
   }
-  // </ngOnInit>
+  // </ngOnInitSnippet>
 
-  // <formatDateTimeTimeZone>
+  // <formatDateTimeTimeZoneSnippet>
   formatDateTimeTimeZone(dateTime: DateTimeTimeZone): string {
     try {
       return moment.tz(dateTime.dateTime, dateTime.timeZone).format();
@@ -39,5 +39,5 @@ export class CalendarComponent implements OnInit {
       this.alertsService.add('DateTimeTimeZone conversion error', JSON.stringify(error));
     }
   }
-  // </formatDateTimeTimeZone>
+  // </formatDateTimeTimeZoneSnippet>
 }

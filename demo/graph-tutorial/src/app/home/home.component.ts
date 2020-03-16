@@ -25,9 +25,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {}
 
-  // <signIn>
+  // <signInSnippet>
   async signIn(): Promise<void> {
     await this.authService.signIn();
   }
-  // </signIn>
+  // </signInSnippet>
 }

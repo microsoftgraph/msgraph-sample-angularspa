@@ -17,7 +17,7 @@ export class AuthService {
   public authenticated: boolean;
   public user: User;
 
-  // <constructor>
+  // <constructorSnippet>
   constructor(
     private msalService: MsalService,
     private alertsService: AlertsService) {
@@ -25,7 +25,7 @@ export class AuthService {
     this.authenticated = this.msalService.getAccount() != null;
     this.getUser().then((user) => {this.user = user});
   }
-  // </constructor>
+  // </constructorSnippet>
 
   // Prompt the user to sign in and
   // grant consent to the requested permission scopes
@@ -61,7 +61,7 @@ export class AuthService {
     return null;
   }
 
-  // <getUser>
+  // <getUserSnippet>
   private async getUser(): Promise<User> {
     if (!this.authenticated) return null;
 
@@ -94,5 +94,5 @@ export class AuthService {
 
     return user;
   }
-  // </getUser>
+  // </getUserSnippet>
 }

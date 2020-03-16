@@ -123,7 +123,7 @@ Right now the authentication service sets constant values for the user's display
 
 1. Add a new function to the `AuthService` class called `getUser`.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="getUser":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="getUserSnippet":::
 
 1. Locate and remove the following code in the `getAccessToken` method that adds an alert to display the access token.
 
@@ -151,11 +151,11 @@ Right now the authentication service sets constant values for the user's display
 
 1. Change the `constructor` for the `AuthService` class to check if the user is already logged in and load their details if so. Replace the existing `constructor` with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="constructor" highlight="5-6":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="constructorSnippet" highlight="5-6":::
 
 1. Remove the temporary code from the `HomeComponent` class. Open the `./src/app/home/home.component.ts` file and replace the existing `signIn` function with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="signIn" highlight="5-6":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="signInSnippet" highlight="5-6":::
 
 Now if you save your changes and start the app, after sign-in you should end up back on the home page, but the UI should change to indicate that you are signed-in.
 

@@ -18,7 +18,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
 1. Once the command completes, open the `./src/app/graph.service.ts` file and replace its contents with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/graph.service.ts" id="graphService":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/graph.service.ts" id="graphServiceSnippet":::
 
     Consider what this code is doing.
 
@@ -87,11 +87,11 @@ Now you can update the `CalendarComponent` component to display the events in a 
 
 1. Remove the temporary code that adds an alert from the `ngOnInit` function. Your updated function should look like this.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/calendar/calendar.component.ts" id="ngOnInit":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/calendar/calendar.component.ts" id="ngOnInitSnippet":::
 
 1. Add a function to the `CalendarComponent` class to format a `DateTimeTimeZone` object into an ISO string.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/calendar/calendar.component.ts" id="formatDateTimeTimeZone":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/calendar/calendar.component.ts" id="formatDateTimeTimeZoneSnippet":::
 
 1. Open the `./src/app/calendar/calendar.component.html` file and replace its contents with the following.
 
