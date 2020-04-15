@@ -1,5 +1,5 @@
 {
-  "sourceDirectory": "./demos/03-add-msgraph",
+  "sourceDirectory": "./demo",
   "exampleConfigFile": "./graph-tutorial/src/oauth.ts.example",
   "configFile": "oauth.ts",
   "archiveFile": "AngularQuickStart.zip",

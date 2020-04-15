@@ -1,0 +1,13 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+/* Add padding for the nav bar */
+body {
+  padding-top: 4.5rem;
+}
+
+/* Style debug info in alerts */
+.alert-pre {
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
