@@ -33,15 +33,16 @@ Before moving on, install some additional packages that you will use later:
 - [angular-fontawesome](https://github.com/FortAwesome/angular-fontawesome) to use FontAwesome icons in Angular.
 - [fontawesome-svg-core](https://github.com/FortAwesome/Font-Awesome), [free-regular-svg-icons](https://github.com/FortAwesome/Font-Awesome), and [free-solid-svg-icons](https://github.com/FortAwesome/Font-Awesome) for the FontAwesome icons used in the sample.
 - [moment](https://github.com/moment/moment) for formatting dates and times.
+- [windows-iana]()
 - [msal-angular](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-angular/README.md) for authenticating to Azure Active Directory and retrieving access tokens.
 - [microsoft-graph-client](https://github.com/microsoftgraph/msgraph-sdk-javascript) for making calls to Microsoft Graph.
 
 1. Run the following commands in your CLI.
 
     ```Shell
-    npm install bootstrap@4.5.3
-    npm install moment@2.29.1 moment-timezone@0.5.31 @ng-bootstrap/ng-bootstrap@7.0.0
-    npm install msal@1.4.2 @azure/msal-angular@1.1.1 @microsoft/microsoft-graph-client@2.1.0
+    npm install bootstrap@4.5.3 @ng-bootstrap/ng-bootstrap@7.0.0 msal@1.4.2 @azure/msal-angular@1.1.1
+    npm install moment@2.29.1 moment-timezone@0.5.31 windows-iana@4.2.1
+    npm install @microsoft/microsoft-graph-client@2.1.0 @microsoft/microsoft-graph-types@1.24.0
     ```
 
 1. Run the following command in your CLI to add the Angular localization package (required by ng-bootstrap).

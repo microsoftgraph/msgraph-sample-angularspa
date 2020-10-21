@@ -116,10 +116,11 @@ Save your changes and refresh the browser. Click the **Click here to sign in** b
 
 Right now the authentication service sets constant values for the user's display name and email address. Now that you have an access token, you can get user details from Microsoft Graph so those values correspond to the current user.
 
-1. Open **./src/app/auth.service.ts** and add the following `import` statement to the top of the file.
+1. Open **./src/app/auth.service.ts** and add the following `import` statements to the top of the file.
 
     ```typescript
     import { Client } from '@microsoft/microsoft-graph-client';
+    import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
     ```
 
 1. Add a new function to the `AuthService` class called `getUser`.

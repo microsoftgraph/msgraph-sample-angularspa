@@ -4,10 +4,6 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
 ## Get calendar events from Outlook
 
-1. Create a new file in the `./src/app` directory called `event.ts` and add the following code.
-
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/event.ts" id="eventClasses":::
-
 1. Add a new service to hold all of your Graph calls. Run the following command in your CLI.
 
     ```Shell
@@ -16,17 +12,81 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
     Just as with the authentication service you created earlier, creating a service for this allows you to inject it into any components that need access to Microsoft Graph.
 
-1. Once the command completes, open the `./src/app/graph.service.ts` file and replace its contents with the following.
+1. Once the command completes, open **./src/app/graph.service.ts** and replace its contents with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/graph.service.ts" id="graphServiceSnippet":::
+    ```typescript
+    import { Injectable } from '@angular/core';
+    import { Client } from '@microsoft/microsoft-graph-client';
+    import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
+
+    import { AuthService } from './auth.service';
+    import { AlertsService } from './alerts.service';
+
+    @Injectable({
+      providedIn: 'root'
+    })
+
+    export class GraphService {
+
+      private graphClient: Client;
+      constructor(
+        private authService: AuthService,
+        private alertsService: AlertsService) {
+
+        // Initialize the Graph client
+        this.graphClient = Client.init({
+          authProvider: async (done) => {
+            // Get the token from the auth service
+            let token = await this.authService.getAccessToken()
+              .catch((reason) => {
+                done(reason, null);
+              });
+
+            if (token)
+            {
+              done(null, token);
+            } else {
+              done("Could not get an access token", null);
+            }
+          }
+        });
+      }
+
+      async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[]> {
+        try {
+          // GET /me/calendarview?startDateTime=''&endDateTime=''
+          // &$select=subject,organizer,start,end
+          // &$orderby=start/dateTime
+          // &$top=50
+          let result =  await this.graphClient
+            .api('/me/calendarview')
+            .header('Prefer', `outlook.timezone="${timeZone}"`)
+            .query({
+              startDateTime: start,
+              endDateTime: end
+            })
+            .select('subject,organizer,start,end')
+            .orderby('start/dateTime')
+            .top(50)
+            .get();
+
+          return result.value;
+        } catch (error) {
+          this.alertsService.add('Could not get events', JSON.stringify(error, null, 2));
+        }
+      }
+    }
+    ```
 
     Consider what this code is doing.
 
     - It initializes a Graph client in the constructor for the service.
-    - It implements a `getEvents` function that uses the Graph client in the following way:
-      - The URL that will be called is `/me/events`.
+    - It implements a `getCalendarView` function that uses the Graph client in the following way:
+      - The URL that will be called is `/me/calendarview`.
+      - The `header` method includes the `Prefer: outlook.timezone` header, which causes the start and end times of the returned events to be in the user's preferred time zone.
+      - The `query` method adds the `startDateTime` and `endDateTime` parameters, defining the window of time for the calendar view.
       - The `select` method limits the fields returned for each events to just those the view will actually use.
-      - The `orderby` method sorts the results by the date and time they were created, with the most recent item being first.
+      - The `orderby` method sorts the results by start time.
 
 1. Create an Angular component to call this new method and display the results of the call. Run the following command in your CLI.
 
@@ -34,9 +94,9 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
     ng generate component calendar
     ```
 
-1. Once the command completes, add the component to the `routes` array in `./src/app/app-routing.module.ts`.
+1. Once the command completes, add the component to the `routes` array in **./src/app/app-routing.module.ts**.
 
-    ```TypeScript
+    ```typescript
     import { CalendarComponent } from './calendar/calendar.component';
 
     const routes: Routes = [
@@ -45,14 +105,16 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
     ];
     ```
 
-1. Open the `./src/app/calendar/calendar.component.ts` file and replace its contents with the following.
+1. Open **./src/app/calendar/calendar.component.ts** and replace its contents with the following.
 
-    ```TypeScript
+    ```typescript
     import { Component, OnInit } from '@angular/core';
     import * as moment from 'moment-timezone';
+    import { findOneIana } from 'windows-iana';
+    import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
+    import { AuthService } from '../auth.service';
     import { GraphService } from '../graph.service';
-    import { Event, DateTimeTimeZone } from '../event';
     import { AlertsService } from '../alerts.service';
 
     @Component({
@@ -62,19 +124,33 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
     })
     export class CalendarComponent implements OnInit {
 
-      public events: Event[];
+      public events: MicrosoftGraph.Event[];
 
       constructor(
+        private authService: AuthService,
         private graphService: GraphService,
         private alertsService: AlertsService) { }
 
       ngOnInit() {
-        this.graphService.getEvents()
-          .then((events) => {
-            this.events = events;
-            // Temporary to display raw results
-            this.alertsService.add('Events from Graph', JSON.stringify(events, null, 2));
-          });
+        // Convert the user's timezone to IANA format
+        const ianaName = findOneIana(this.authService.user.timeZone);
+        const timeZone = ianaName!.valueOf() || this.authService.user.timeZone;
+
+        // Get midnight on the start of the current week in the user's timezone,
+        // but in UTC. For example, for Pacific Standard Time, the time value would be
+        // 07:00:00Z
+        var startOfWeek = moment.tz(timeZone).startOf('week').utc();
+        var endOfWeek = moment(startOfWeek).add(7, 'day');
+
+        this.graphService.getCalendarView(
+          startOfWeek.format(),
+          endOfWeek.format(),
+          this.authService.user.timeZone)
+            .then((events) => {
+              this.events = events;
+              // Temporary to display raw results
+              this.alertsService.add('Events from Graph', JSON.stringify(events, null, 2));
+            });
       }
     }
     ```
@@ -93,7 +169,7 @@ Now you can update the `CalendarComponent` component to display the events in a 
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/calendar/calendar.component.ts" id="formatDateTimeTimeZoneSnippet":::
 
-1. Open the `./src/app/calendar/calendar.component.html` file and replace its contents with the following.
+1. Open **./src/app/calendar/calendar.component.html** and replace its contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/calendar/calendar.component.html" id="calendarHtml":::
 

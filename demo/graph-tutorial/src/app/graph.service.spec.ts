@@ -3,14 +3,14 @@
 
 import { TestBed } from '@angular/core/testing';
 
-import { AuthService } from './auth.service';
+import { GraphService } from './graph.service';
 
-describe('AuthService', () => {
-  let service: AuthService;
+describe('GraphService', () => {
+  let service: GraphService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AuthService);
+    service = TestBed.inject(GraphService);
   });
 
   it('should be created', () => {

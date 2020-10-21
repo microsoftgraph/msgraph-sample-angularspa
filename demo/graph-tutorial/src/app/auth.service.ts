@@ -1,6 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { Client } from '@microsoft/microsoft-graph-client';
+import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
 import { AlertsService } from './alerts.service';
 import { OAuthSettings } from '../oauth';
@@ -82,12 +86,17 @@ export class AuthService {
     });
 
     // Get the user from Graph (GET /me)
-    let graphUser = await graphClient.api('/me').get();
+    let graphUser: MicrosoftGraph.User = await graphClient
+      .api('/me')
+      .select('displayName,mail,mailboxSettings,userPrincipalName')
+      .get();
 
     let user = new User();
     user.displayName = graphUser.displayName;
     // Prefer the mail property, but fall back to userPrincipalName
     user.email = graphUser.mail || graphUser.userPrincipalName;
+    user.timeZone = graphUser.mailboxSettings.timeZone;
+
     // Use default avatar
     user.avatar = '/assets/no-profile-photo.png';
 

@@ -12,13 +12,15 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HomeComponent } from './home/home.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { OAuthSettings } from '../oauth';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
     HomeComponent,
-    AlertsComponent
+    AlertsComponent,
+    CalendarComponent
   ],
   // <imports>
   imports: [

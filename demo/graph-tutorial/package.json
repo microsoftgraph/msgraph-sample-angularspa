@@ -21,6 +21,7 @@
     "@angular/router": "~10.1.6",
     "@azure/msal-angular": "^1.1.1",
     "@microsoft/microsoft-graph-client": "^2.1.0",
+    "@microsoft/microsoft-graph-types": "^1.24.0",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "bootstrap": "^4.5.3",
     "moment": "^2.29.1",
@@ -28,6 +29,7 @@
     "msal": "^1.4.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "windows-iana": "^4.2.1",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
