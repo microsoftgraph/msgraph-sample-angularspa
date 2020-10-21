@@ -23,11 +23,11 @@
           <a class="nav-link" href="https://docs.microsoft.com/graph/overview" target="_blank">Docs</a>
         </li>
         <li *ngIf="authenticated" ngbDropdown placement="bottom-right" class="nav-item">
-          <a ngbDropdownToggle id="userMenu" class="nav-link" role="button" aria-haspopup="true"
+          <a ngbDropdownToggle id="userMenu" class="nav-link avatar-link" role="button" aria-haspopup="true"
             aria-expanded="false">
-            <img src="user.avatar" class="rounded-circle align-self-center mr-2" style="width: 32px;">
+            <img src="{{user.avatar}}" class="rounded-circle align-self-center mr-2" style="width: 32px;">
           </a>
-          <div ngbDropdownMenu aria-labelledby="userMenu">
+          <div ngbDropdownMenu aria-labelledby="userMenu" class="dropdown-menu-right">
             <h5 class="dropdown-item-text mb-0">{{user.displayName}}</h5>
             <p class="dropdown-item-text text-muted mb-0">{{user.email}}</p>
             <div class="dropdown-divider"></div>

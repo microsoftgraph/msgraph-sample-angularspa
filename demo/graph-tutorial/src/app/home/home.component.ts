@@ -3,6 +3,7 @@
 
 import { Component, OnInit } from '@angular/core';
 
+import { AuthService } from '../auth.service';
 import { User } from '../user';
 
 @Component({
@@ -11,25 +12,22 @@ import { User } from '../user';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
   // Is a user logged in?
-  authenticated: boolean;
+  get authenticated(): boolean {
+    return this.authService.authenticated;
+  }
   // The user
-  user: any;
-
-  constructor() { }
-
-  ngOnInit() {
-    this.authenticated = false;
-    this.user = {};
+  get user(): User {
+    return this.authService.user;
   }
 
-  signIn(): void {
-    // Temporary
-    this.authenticated = true;
-    this.user = {
-      displayName: 'Adele Vance',
-      email: 'AdeleV@contoso.com'
-    };
+  constructor(public authService: AuthService) { }
+
+  ngOnInit() {}
+
+  // <signInSnippet>
+  async signIn(): Promise<void> {
+    await this.authService.signIn();
   }
+  // </signInSnippet>
 }

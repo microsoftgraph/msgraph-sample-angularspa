@@ -54,11 +54,11 @@ Before moving on, install some additional packages that you will use later:
 
 In this section you'll create the user interface for the app.
 
-1. Open the `./src/styles.css` and add the following lines.
+1. Open **./src/styles.css** and add the following lines.
 
     :::code language="css" source="../demo/graph-tutorial/src/styles.css":::
 
-1. Add the Bootstrap module to the app. Open `./src/app/app.module.ts` and replace its contents with the following.
+1. Add the Bootstrap module to the app. Open **./src/app/app.module.ts** and replace its contents with the following.
 
     ```typescript
     import { BrowserModule } from '@angular/platform-browser';
@@ -89,7 +89,7 @@ In this section you'll create the user interface for the app.
     export class AppModule { }
     ```
 
-1. Create a new file in the `./src/app` folder named `user.ts` and add the following code.
+1. Create a new file in the **./src/app** folder named **user.ts** and add the following code.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/user.ts" id="user":::
 
@@ -99,9 +99,9 @@ In this section you'll create the user interface for the app.
     ng generate component nav-bar
     ```
 
-1. Once the command completes, open the `./src/app/nav-bar/nav-bar.component.ts` file and replace its contents with the following.
+1. Once the command completes, open **./src/app/nav-bar/nav-bar.component.ts** and replace its contents with the following.
 
-    ```TypeScript
+    ```typescript
     import { Component, OnInit } from '@angular/core';
 
     import { User } from '../user';
@@ -152,7 +152,7 @@ In this section you'll create the user interface for the app.
     }
     ```
 
-1. Open the `./src/app/nav-bar/nav-bar.component.html` file and replace its contents with the following.
+1. Open **./src/app/nav-bar/nav-bar.component.html** and replace its contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/nav-bar/nav-bar.component.html" id="navHtml":::
 
@@ -162,9 +162,9 @@ In this section you'll create the user interface for the app.
     ng generate component home
     ```
 
-1. Once the command completes, open the `./src/app/home/home.component.ts` file and replace its contents with the following.
+1. Once the command completes, open **./src/app/home/home.component.ts** and replace its contents with the following.
 
-    ```TypeScript
+    ```typescript
     import { Component, OnInit } from '@angular/core';
 
     import { User } from '../user';
@@ -199,11 +199,11 @@ In this section you'll create the user interface for the app.
     }
     ```
 
-1. Open the `./src/app/home/home.component.html` file and replace its contents with the following.
+1. Open **./src/app/home/home.component.html** and replace its contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/home/home.component.html" id="homeHtml":::
 
-1. Create a simple `Alert` class. Create a new file in the `./src/app` directory named `alert.ts` and add the following code.
+1. Create a simple `Alert` class. Create a new file in the **./src/app** directory named **alert.ts** and add the following code.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/alert.ts" id="alert":::
 
@@ -213,7 +213,7 @@ In this section you'll create the user interface for the app.
     ng generate service alerts
     ```
 
-1. Open the `./src/app/alerts.service.ts` file and replace its contents with the following.
+1. Open **./src/app/alerts.service.ts** and replace its contents with the following.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/alerts.service.ts" id="alertsService":::
 
@@ -223,15 +223,15 @@ In this section you'll create the user interface for the app.
     ng generate component alerts
     ```
 
-1. Once the command completes, open the `./src/app/alerts/alerts.component.ts` file and replace its contents with the following.
+1. Once the command completes, open **./src/app/alerts/alerts.component.ts** and replace its contents with the following.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/alerts/alerts.component.ts" id="alertComponent":::
 
-1. Open the `./src/app/alerts/alerts.component.html` file and replace its contents with the following.
+1. Open **./src/app/alerts/alerts.component.html** and replace its contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/alerts/alerts.component.html" id="alertHtml":::
 
-1. Open the `./src/app/app-routing.module.ts` file and replace the `const routes: Routes = [];` line with the following code.
+1. Open **./src/app/app-routing.module.ts** and replace the `const routes: Routes = [];` line with the following code.
 
     ```typescript
     import { HomeComponent } from './home/home.component';
@@ -241,9 +241,11 @@ In this section you'll create the user interface for the app.
     ];
     ```
 
-1. Open the `./src/app/app.component.html` file and replace its entire contents with the following.
+1. Open **./src/app/app.component.html** and replace its entire contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/app.component.html" id="appHtml":::
+
+1. Add an image file of your choosing named **no-profile-photo.png** in the **./src/assets** directory. This image will be used as the user's photo when the user has no photo in Microsoft Graph.
 
 Save all of your changes and refresh the page. Now, the app should look very different.
 
