@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// <navBarSnippet>
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from '../auth.service';
 import { User } from '../user';
 
 @Component({
@@ -17,18 +15,16 @@ export class NavBarComponent implements OnInit {
   // Should the collapsed nav show?
   showNav: boolean;
   // Is a user logged in?
-  get authenticated(): boolean {
-    return this.authService.authenticated;
-  }
+  authenticated: boolean;
   // The user
-  get user(): User {
-    return this.authService.user;
-  }
+  user: User;
 
-  constructor(private authService: AuthService) { }
+  constructor() { }
 
   ngOnInit() {
     this.showNav = false;
+    this.authenticated = false;
+    this.user = null;
   }
 
   // Used by the Bootstrap navbar-toggler button to hide/show
@@ -37,12 +33,19 @@ export class NavBarComponent implements OnInit {
     this.showNav = !this.showNav;
   }
 
-  async signIn(): Promise<void> {
-    await this.authService.signIn();
+  signIn(): void {
+    // Temporary
+    this.authenticated = true;
+    this.user = {
+      displayName: 'Adele Vance',
+      email: 'AdeleV@contoso.com',
+      avatar: '/assets/no-profile-photo.png'
+    };
   }
 
   signOut(): void {
-    this.authService.signOut();
+    // Temporary
+    this.authenticated = false;
+    this.user = null;
   }
 }
-// </navBarSnippet>

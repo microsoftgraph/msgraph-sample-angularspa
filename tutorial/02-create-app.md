@@ -5,7 +5,7 @@ In this section, you'll create a new Angular project.
 1. Open your command-line interface (CLI), navigate to a directory where you have rights to create files, and run the following commands to install the [Angular CLI](https://www.npmjs.com/package/@angular/cli) tool and create a new Angular app.
 
     ```Shell
-    npm install -g @angular/cli@9.0.6
+    npm install -g @angular/cli@10.1.7
     ng new graph-tutorial
     ```
 
@@ -39,10 +39,9 @@ Before moving on, install some additional packages that you will use later:
 1. Run the following commands in your CLI.
 
     ```Shell
-    npm install bootstrap@4.4.1 @fortawesome/angular-fontawesome@0.6.0 @fortawesome/fontawesome-svg-core@1.2.27
-    npm install @fortawesome/free-regular-svg-icons@5.12.1 @fortawesome/free-solid-svg-icons@5.12.1
-    npm install moment@2.24.0 moment-timezone@0.5.28 @ng-bootstrap/ng-bootstrap@6.0.0
-    npm install msal@1.2.1 @azure/msal-angular@1.0.0-beta.4 @microsoft/microsoft-graph-client@2.0.0
+    npm install bootstrap@4.5.3
+    npm install moment@2.29.1 moment-timezone@0.5.31 @ng-bootstrap/ng-bootstrap@7.0.0
+    npm install msal@1.4.2 @azure/msal-angular@1.1.1 @microsoft/microsoft-graph-client@2.1.0
     ```
 
 1. Run the following command in your CLI to add the Angular localization package (required by ng-bootstrap).
@@ -59,15 +58,12 @@ In this section you'll create the user interface for the app.
 
     :::code language="css" source="../demo/graph-tutorial/src/styles.css":::
 
-1. Add the Bootstrap and FontAwesome modules to the app. Open `./src/app/app.module.ts` and replace its contents with the following.
+1. Add the Bootstrap module to the app. Open `./src/app/app.module.ts` and replace its contents with the following.
 
-    ```TypeScript
+    ```typescript
     import { BrowserModule } from '@angular/platform-browser';
     import { NgModule } from '@angular/core';
     import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-    import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-    import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-    import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 
     import { AppRoutingModule } from './app-routing.module';
     import { AppComponent } from './app.component';
@@ -85,18 +81,12 @@ In this section you'll create the user interface for the app.
       imports: [
         BrowserModule,
         AppRoutingModule,
-        NgbModule,
-        FontAwesomeModule
+        NgbModule
       ],
       providers: [],
       bootstrap: [AppComponent]
     })
-    export class AppModule {
-      constructor(library: FaIconLibrary) {
-        // Register the FontAwesome icons used by the app
-        library.addIcons(faExternalLinkAlt, faUserCircle);
-      }
-     }
+    export class AppModule { }
     ```
 
 1. Create a new file in the `./src/app` folder named `user.ts` and add the following code.
