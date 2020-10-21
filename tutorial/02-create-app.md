@@ -30,8 +30,6 @@ Before moving on, install some additional packages that you will use later:
 
 - [bootstrap](https://github.com/twbs/bootstrap) for styling and common components.
 - [ng-bootstrap](https://github.com/ng-bootstrap/ng-bootstrap) for using Bootstrap components from Angular.
-- [angular-fontawesome](https://github.com/FortAwesome/angular-fontawesome) to use FontAwesome icons in Angular.
-- [fontawesome-svg-core](https://github.com/FortAwesome/Font-Awesome), [free-regular-svg-icons](https://github.com/FortAwesome/Font-Awesome), and [free-solid-svg-icons](https://github.com/FortAwesome/Font-Awesome) for the FontAwesome icons used in the sample.
 - [moment](https://github.com/moment/moment) for formatting dates and times.
 - [windows-iana](https://github.com/rubenillodo/windows-iana)
 - [msal-angular](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-angular/README.md) for authenticating to Azure Active Directory and retrieving access tokens.
