@@ -11,3 +11,9 @@ body {
   word-break: break-all;
   white-space: pre-wrap;
 }
+
+/* Add padding to user avatar link */
+.avatar-link {
+  padding-top: .25em;
+  padding-bottom: .25em;
+}

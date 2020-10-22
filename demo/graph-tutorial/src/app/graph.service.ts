@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// <graphServiceSnippet>
 import { Injectable } from '@angular/core';
 import { Client } from '@microsoft/microsoft-graph-client';
+import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
 import { AuthService } from './auth.service';
-import { Event } from './event';
 import { AlertsService } from './alerts.service';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class GraphService {
 
   private graphClient: Client;
@@ -38,18 +38,40 @@ export class GraphService {
     });
   }
 
-  async getEvents(): Promise<Event[]> {
+  async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[]> {
     try {
+      // GET /me/calendarview?startDateTime=''&endDateTime=''
+      // &$select=subject,organizer,start,end
+      // &$orderby=start/dateTime
+      // &$top=50
       let result =  await this.graphClient
-        .api('/me/events')
+        .api('/me/calendarview')
+        .header('Prefer', `outlook.timezone="${timeZone}"`)
+        .query({
+          startDateTime: start,
+          endDateTime: end
+        })
         .select('subject,organizer,start,end')
-        .orderby('createdDateTime DESC')
+        .orderby('start/dateTime')
+        .top(50)
         .get();
 
       return result.value;
     } catch (error) {
-      this.alertsService.add('Could not get events', JSON.stringify(error, null, 2));
+      this.alertsService.addError('Could not get events', JSON.stringify(error, null, 2));
     }
   }
+
+  // <AddEventSnippet>
+  async addEventToCalendar(newEvent: MicrosoftGraph.Event): Promise<void> {
+    try {
+      // POST /me/events
+      await this.graphClient
+        .api('/me/events')
+        .post(newEvent);
+    } catch (error) {
+      throw Error(JSON.stringify(error, null, 2));
+    }
+  }
+  // </AddEventSnippet>
 }
-// </graphServiceSnippet>

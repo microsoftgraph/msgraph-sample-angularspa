@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
     return this.authService.user;
   }
 
-  constructor(public authService: AuthService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {}
 

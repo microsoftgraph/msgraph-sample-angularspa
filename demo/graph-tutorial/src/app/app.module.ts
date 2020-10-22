@@ -2,11 +2,9 @@
 // Licensed under the MIT License.
 
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 import { MsalModule } from '@azure/msal-angular';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { OAuthSettings } from '../oauth';
 import { CalendarComponent } from './calendar/calendar.component';
+import { NewEventComponent } from './new-event/new-event.component';
 
 @NgModule({
   declarations: [
@@ -23,17 +22,19 @@ import { CalendarComponent } from './calendar/calendar.component';
     NavBarComponent,
     HomeComponent,
     AlertsComponent,
-    CalendarComponent
+    CalendarComponent,
+    NewEventComponent
   ],
   // <imports>
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     NgbModule,
-    FontAwesomeModule,
     MsalModule.forRoot({
       auth: {
-        clientId: OAuthSettings.appId
+        clientId: OAuthSettings.appId,
+        redirectUri: OAuthSettings.redirectUri
       }
     })
   ],
@@ -41,9 +42,4 @@ import { CalendarComponent } from './calendar/calendar.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  constructor(library: FaIconLibrary) {
-    // Register the FontAwesome icons used by the app
-    library.addIcons(faExternalLinkAlt, faUserCircle);
-  }
- }
+export class AppModule { }
