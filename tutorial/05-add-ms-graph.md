@@ -72,7 +72,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
           return result.value;
         } catch (error) {
-          this.alertsService.add('Could not get events', JSON.stringify(error, null, 2));
+          this.alertsService.addError('Could not get events', JSON.stringify(error, null, 2));
         }
       }
     }
@@ -149,7 +149,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
             .then((events) => {
               this.events = events;
               // Temporary to display raw results
-              this.alertsService.add('Events from Graph', JSON.stringify(events, null, 2));
+              this.alertsService.addSuccess('Events from Graph', JSON.stringify(events, null, 2));
             });
       }
     }

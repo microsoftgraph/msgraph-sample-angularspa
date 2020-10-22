@@ -65,7 +65,7 @@ In this section you'll create an authentication service and implement sign-in an
       async signIn(): Promise<void> {
         let result = await this.msalService.loginPopup(OAuthSettings)
           .catch((reason) => {
-            this.alertsService.add('Login failed', JSON.stringify(reason, null, 2));
+            this.alertsService.addError('Login failed', JSON.stringify(reason, null, 2));
           });
 
         if (result) {
@@ -89,14 +89,17 @@ In this section you'll create an authentication service and implement sign-in an
       async getAccessToken(): Promise<string> {
         let result = await this.msalService.acquireTokenSilent(OAuthSettings)
           .catch((reason) => {
-            this.alertsService.add('Get token failed', JSON.stringify(reason, null, 2));
+            this.alertsService.addError('Get token failed', JSON.stringify(reason, null, 2));
           });
 
         if (result) {
           // Temporary to display token in an error box
-          this.alertsService.add('Token acquired', result.accessToken);
+          this.alertsService.addSuccess('Token acquired', result.accessToken);
           return result.accessToken;
         }
+
+        // Couldn't get a token
+        this.authenticated = false;
         return null;
       }
     }
@@ -131,7 +134,7 @@ Right now the authentication service sets constant values for the user's display
 
     ```typescript
     // Temporary to display token in an error box
-    this.alertsService.add('Token acquired', result);
+    this.alertsService.addSuccess('Token acquired', result);
     ```
 
 1. Locate and remove the following code from the `signIn` method.

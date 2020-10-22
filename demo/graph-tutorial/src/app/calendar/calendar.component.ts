@@ -52,7 +52,7 @@ export class CalendarComponent implements OnInit {
       return moment.tz(dateTime.dateTime, dateTime.timeZone).format();
     }
     catch(error) {
-      this.alertsService.add('DateTimeTimeZone conversion error', JSON.stringify(error));
+      this.alertsService.addError('DateTimeTimeZone conversion error', JSON.stringify(error));
     }
   }
   // </formatDateTimeTimeZoneSnippet>

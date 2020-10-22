@@ -13,8 +13,12 @@ export class AlertsService {
 
   alerts: Alert[] = [];
 
-  add(message: string, debug: string) {
-    this.alerts.push({message: message, debug: debug});
+  addError(message: string, debug?: string) {
+    this.alerts.push({message: message, debug: debug, type: 'danger'});
+  }
+
+  addSuccess(message: string, debug?: string) {
+    this.alerts.push({message: message, debug: debug, type: 'success'});
   }
 
   remove(alert: Alert) {

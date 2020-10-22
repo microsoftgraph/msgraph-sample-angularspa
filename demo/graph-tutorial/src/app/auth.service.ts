@@ -33,7 +33,7 @@ export class AuthService {
   async signIn(): Promise<void> {
     let result = await this.msalService.loginPopup(OAuthSettings)
       .catch((reason) => {
-        this.alertsService.add('Login failed', JSON.stringify(reason, null, 2));
+        this.alertsService.addError('Login failed', JSON.stringify(reason, null, 2));
       });
 
     if (result) {
@@ -53,12 +53,15 @@ export class AuthService {
   async getAccessToken(): Promise<string> {
     let result = await this.msalService.acquireTokenSilent(OAuthSettings)
       .catch((reason) => {
-        this.alertsService.add('Get token failed', JSON.stringify(reason, null, 2));
+        this.alertsService.addError('Get token failed', JSON.stringify(reason, null, 2));
       });
 
     if (result) {
       return result.accessToken;
     }
+
+    // Couldn't get a token
+    this.authenticated = false;
     return null;
   }
 

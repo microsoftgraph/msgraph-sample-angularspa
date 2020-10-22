@@ -58,7 +58,20 @@ export class GraphService {
 
       return result.value;
     } catch (error) {
-      this.alertsService.add('Could not get events', JSON.stringify(error, null, 2));
+      this.alertsService.addError('Could not get events', JSON.stringify(error, null, 2));
     }
   }
+
+  // <AddEventSnippet>
+  async addEventToCalendar(newEvent: MicrosoftGraph.Event): Promise<void> {
+    try {
+      // POST /me/events
+      await this.graphClient
+        .api('/me/events')
+        .post(newEvent);
+    } catch (error) {
+      throw Error(JSON.stringify(error, null, 2));
+    }
+  }
+  // </AddEventSnippet>
 }
