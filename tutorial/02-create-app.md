@@ -5,7 +5,7 @@ In this section, you'll create a new Angular project.
 1. Open your command-line interface (CLI), navigate to a directory where you have rights to create files, and run the following commands to install the [Angular CLI](https://www.npmjs.com/package/@angular/cli) tool and create a new Angular app.
 
     ```Shell
-    npm install -g @angular/cli@9.0.6
+    npm install -g @angular/cli@10.1.7
     ng new graph-tutorial
     ```
 
@@ -30,19 +30,17 @@ Before moving on, install some additional packages that you will use later:
 
 - [bootstrap](https://github.com/twbs/bootstrap) for styling and common components.
 - [ng-bootstrap](https://github.com/ng-bootstrap/ng-bootstrap) for using Bootstrap components from Angular.
-- [angular-fontawesome](https://github.com/FortAwesome/angular-fontawesome) to use FontAwesome icons in Angular.
-- [fontawesome-svg-core](https://github.com/FortAwesome/Font-Awesome), [free-regular-svg-icons](https://github.com/FortAwesome/Font-Awesome), and [free-solid-svg-icons](https://github.com/FortAwesome/Font-Awesome) for the FontAwesome icons used in the sample.
 - [moment](https://github.com/moment/moment) for formatting dates and times.
+- [windows-iana](https://github.com/rubenillodo/windows-iana)
 - [msal-angular](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-angular/README.md) for authenticating to Azure Active Directory and retrieving access tokens.
 - [microsoft-graph-client](https://github.com/microsoftgraph/msgraph-sdk-javascript) for making calls to Microsoft Graph.
 
 1. Run the following commands in your CLI.
 
     ```Shell
-    npm install bootstrap@4.4.1 @fortawesome/angular-fontawesome@0.6.0 @fortawesome/fontawesome-svg-core@1.2.27
-    npm install @fortawesome/free-regular-svg-icons@5.12.1 @fortawesome/free-solid-svg-icons@5.12.1
-    npm install moment@2.24.0 moment-timezone@0.5.28 @ng-bootstrap/ng-bootstrap@6.0.0
-    npm install msal@1.2.1 @azure/msal-angular@1.0.0-beta.4 @microsoft/microsoft-graph-client@2.0.0
+    npm install bootstrap@4.5.3 @ng-bootstrap/ng-bootstrap@7.0.0 msal@1.4.2 @azure/msal-angular@1.1.1
+    npm install moment@2.29.1 moment-timezone@0.5.31 windows-iana@4.2.1
+    npm install @microsoft/microsoft-graph-client@2.1.0 @microsoft/microsoft-graph-types@1.24.0
     ```
 
 1. Run the following command in your CLI to add the Angular localization package (required by ng-bootstrap).
@@ -55,51 +53,38 @@ Before moving on, install some additional packages that you will use later:
 
 In this section you'll create the user interface for the app.
 
-1. Open the `./src/styles.css` and add the following lines.
+1. Open **./src/styles.css** and add the following lines.
 
     :::code language="css" source="../demo/graph-tutorial/src/styles.css":::
 
-1. Add the Bootstrap and FontAwesome modules to the app. Open `./src/app/app.module.ts` and replace its contents with the following.
+1. Add the Bootstrap module to the app. Open **./src/app/app.module.ts** and replace its contents with the following.
 
-    ```TypeScript
+    ```typescript
     import { BrowserModule } from '@angular/platform-browser';
+    import { FormsModule } from '@angular/forms';
     import { NgModule } from '@angular/core';
     import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-    import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-    import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-    import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 
     import { AppRoutingModule } from './app-routing.module';
     import { AppComponent } from './app.component';
-    import { NavBarComponent } from './nav-bar/nav-bar.component';
-    import { HomeComponent } from './home/home.component';
-    import { AlertsComponent } from './alerts/alerts.component';
 
     @NgModule({
       declarations: [
-        AppComponent,
-        NavBarComponent,
-        HomeComponent,
-        AlertsComponent
+        AppComponent
       ],
       imports: [
         BrowserModule,
+        FormsModule,
         AppRoutingModule,
-        NgbModule,
-        FontAwesomeModule
+        NgbModule
       ],
       providers: [],
       bootstrap: [AppComponent]
     })
-    export class AppModule {
-      constructor(library: FaIconLibrary) {
-        // Register the FontAwesome icons used by the app
-        library.addIcons(faExternalLinkAlt, faUserCircle);
-      }
-     }
+    export class AppModule { }
     ```
 
-1. Create a new file in the `./src/app` folder named `user.ts` and add the following code.
+1. Create a new file in the **./src/app** folder named **user.ts** and add the following code.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/user.ts" id="user":::
 
@@ -109,9 +94,9 @@ In this section you'll create the user interface for the app.
     ng generate component nav-bar
     ```
 
-1. Once the command completes, open the `./src/app/nav-bar/nav-bar.component.ts` file and replace its contents with the following.
+1. Once the command completes, open **./src/app/nav-bar/nav-bar.component.ts** and replace its contents with the following.
 
-    ```TypeScript
+    ```typescript
     import { Component, OnInit } from '@angular/core';
 
     import { User } from '../user';
@@ -162,7 +147,7 @@ In this section you'll create the user interface for the app.
     }
     ```
 
-1. Open the `./src/app/nav-bar/nav-bar.component.html` file and replace its contents with the following.
+1. Open **./src/app/nav-bar/nav-bar.component.html** and replace its contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/nav-bar/nav-bar.component.html" id="navHtml":::
 
@@ -172,9 +157,9 @@ In this section you'll create the user interface for the app.
     ng generate component home
     ```
 
-1. Once the command completes, open the `./src/app/home/home.component.ts` file and replace its contents with the following.
+1. Once the command completes, open **./src/app/home/home.component.ts** and replace its contents with the following.
 
-    ```TypeScript
+    ```typescript
     import { Component, OnInit } from '@angular/core';
 
     import { User } from '../user';
@@ -209,11 +194,11 @@ In this section you'll create the user interface for the app.
     }
     ```
 
-1. Open the `./src/app/home/home.component.html` file and replace its contents with the following.
+1. Open **./src/app/home/home.component.html** and replace its contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/home/home.component.html" id="homeHtml":::
 
-1. Create a simple `Alert` class. Create a new file in the `./src/app` directory named `alert.ts` and add the following code.
+1. Create a simple `Alert` class. Create a new file in the **./src/app** directory named **alert.ts** and add the following code.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/alert.ts" id="alert":::
 
@@ -223,7 +208,7 @@ In this section you'll create the user interface for the app.
     ng generate service alerts
     ```
 
-1. Open the `./src/app/alerts.service.ts` file and replace its contents with the following.
+1. Open **./src/app/alerts.service.ts** and replace its contents with the following.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/alerts.service.ts" id="alertsService":::
 
@@ -233,15 +218,15 @@ In this section you'll create the user interface for the app.
     ng generate component alerts
     ```
 
-1. Once the command completes, open the `./src/app/alerts/alerts.component.ts` file and replace its contents with the following.
+1. Once the command completes, open **./src/app/alerts/alerts.component.ts** and replace its contents with the following.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/alerts/alerts.component.ts" id="alertComponent":::
 
-1. Open the `./src/app/alerts/alerts.component.html` file and replace its contents with the following.
+1. Open **./src/app/alerts/alerts.component.html** and replace its contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/alerts/alerts.component.html" id="alertHtml":::
 
-1. Open the `./src/app/app-routing.module.ts` file and replace the `const routes: Routes = [];` line with the following code.
+1. Open **./src/app/app-routing.module.ts** and replace the `const routes: Routes = [];` line with the following code.
 
     ```typescript
     import { HomeComponent } from './home/home.component';
@@ -251,9 +236,11 @@ In this section you'll create the user interface for the app.
     ];
     ```
 
-1. Open the `./src/app/app.component.html` file and replace its entire contents with the following.
+1. Open **./src/app/app.component.html** and replace its entire contents with the following.
 
     :::code language="html" source="../demo/graph-tutorial/src/app/app.component.html" id="appHtml":::
+
+1. Add an image file of your choosing named **no-profile-photo.png** in the **./src/assets** directory. This image will be used as the user's photo when the user has no photo in Microsoft Graph.
 
 Save all of your changes and refresh the page. Now, the app should look very different.
 

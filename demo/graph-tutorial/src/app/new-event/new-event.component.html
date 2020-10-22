@@ -1,0 +1,57 @@
+<!-- Copyright (c) Microsoft Corporation.
+     Licensed under the MIT License. -->
+
+<!-- <NewEventFormSnippet> -->
+<h1>New event</h1>
+<form (ngSubmit)="onSubmit()" #newEventForm="ngForm">
+  <div class="form-group">
+    <label for="subject">Subject</label>
+    <input type="text" class="form-control" id="subject"
+           required
+           [(ngModel)]="model.subject" name="subject"
+           #name="ngModel">
+    <div [hidden]="name.valid || name.pristine"
+         class="alert alert-danger">Subject is required</div>
+  </div>
+  <div class="form-group">
+    <label for="attendees">Attendees</label>
+    <input type="text" class="form-control" id="attendees"
+           placeholder="Enter one or more email addresses (separated with a ;) to add attendees"
+           [(ngModel)]="model.attendees" name="attendees"
+           #name="ngModel">
+  </div>
+  <div class="form-row">
+    <div class="col">
+      <div class="form-group">
+        <label for="start">Start</label>
+        <input type="datetime-local" class="form-control" id="start"
+              required
+              [(ngModel)]="model.start" name="start"
+              #name="ngModel">
+        <div [hidden]="name.valid || name.pristine"
+             class="alert alert-danger">Start is required</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="end">End</label>
+        <input type="datetime-local" class="form-control" id="end"
+              required
+              [(ngModel)]="model.end" name="end"
+              #name="ngModel">
+        <div [hidden]="name.valid || name.pristine"
+             class="alert alert-danger">End is required</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="body">Body</label>
+    <textarea class="form-control" id="body" rows="4"
+              [(ngModel)]="model.body" name="body"
+              #name="ngModel"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary mr-2"
+          [disabled]="!newEventForm.form.valid">Create</button>
+  <a class="btn btn-secondary" routerLink="/calendar">Cancel</a>
+</form>
+<!-- </NewEventFormSnippet> -->
