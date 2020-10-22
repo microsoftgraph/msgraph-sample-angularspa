@@ -20,7 +20,7 @@ In this exercise you will extend the application from the previous exercise to s
 
 1. Add the `MsalModule` to the `imports` array inside the `@NgModule` declaration, and initialize it with the app ID.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="imports" highlight="5-9":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="imports" highlight="6-11":::
 
 ## Implement sign-in
 
@@ -111,7 +111,7 @@ In this section you'll create an authentication service and implement sign-in an
 
 1. Open **./src/app/home/home.component.ts** and replace its contents with the following.
 
-    :::code language="typescript" source="snippets/snippets.ts" id="homeSnippet" highlight="3,12-19,21,23,25-27":::
+    :::code language="typescript" source="snippets/snippets.ts" id="homeSnippet" highlight="3,12-19,21,23,25-32":::
 
 Save your changes and refresh the browser. Click the **Click here to sign in** button and you should be redirected to `https://login.microsoftonline.com`. Login with your Microsoft account and consent to the requested permissions. The app page should refresh, showing the token.
 
