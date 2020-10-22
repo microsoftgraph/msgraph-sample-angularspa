@@ -32,6 +32,7 @@ This module has been recorded and is available in the Office Development YouTube
 
 | Version |       Date       |                     Comments                     |
 | ------- | ---------------- | ------------------------------------------------ |
+| 1.7     | October 22, 2020 | Updated sample to latest versions                |
 | 1.6     | March 16, 2020   | Updated sample to latest versions                |
 | 1.5     | June 18, 2019    | Updated readme to refreshed screencast recording |
 | 1.4     | May 24, 2019     | 2019Q4 content refresh                           |
