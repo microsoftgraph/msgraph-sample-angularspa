@@ -33,7 +33,7 @@ In this exercise you will extend the application from the previous exercise to s
 
 1. Add the `MSALInstanceFactory` and `MsalService` to the `providers` array inside the `@NgModule` declaration.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="ProvidersSnippet" highlight="2-5":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="ProvidersSnippet" highlight="2-6":::
 
 ## Implement sign-in
 
