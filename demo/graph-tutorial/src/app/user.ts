@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// <user>
+// <UserSnippet>
 export class User {
-  displayName: string;
-  email: string;
-  avatar: string;
-  timeZone: string;
+  displayName!: string;
+  email!: string;
+  avatar!: string;
+  timeZone!: string;
 }
-// </user>
+// </UserSnippet>

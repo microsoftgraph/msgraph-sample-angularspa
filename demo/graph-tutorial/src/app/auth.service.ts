@@ -16,24 +16,28 @@ import { User } from './user';
 
 export class AuthService {
   public authenticated: boolean;
-  public user: User;
+  public user?: User;
 
-  // <constructorSnippet>
+  // <ConstructorSnippet>
   constructor(
     private msalService: MsalService,
     private alertsService: AlertsService) {
 
-    this.authenticated = this.msalService.getAccount() != null;
-    this.getUser().then((user) => {this.user = user});
+      this.authenticated = this.msalService.instance
+        .getAllAccounts().length > 0;
+      this.getUser().then((user) => {this.user = user});
   }
-  // </constructorSnippet>
+  // </ConstructorSnippet>
 
   // Prompt the user to sign in and
   // grant consent to the requested permission scopes
   async signIn(): Promise<void> {
-    let result = await this.msalService.loginPopup(OAuthSettings)
+    const result = await this.msalService
+      .loginPopup(OAuthSettings)
+      .toPromise()
       .catch((reason) => {
-        this.alertsService.addError('Login failed', JSON.stringify(reason, null, 2));
+        this.alertsService.addError('Login failed',
+          JSON.stringify(reason, null, 2));
       });
 
     if (result) {
@@ -43,15 +47,21 @@ export class AuthService {
   }
 
   // Sign out
-  signOut(): void {
-    this.msalService.logout();
-    this.user = null;
+  async signOut(): Promise<void> {
+    await this.msalService.logout().toPromise();
+    this.user = undefined;
     this.authenticated = false;
   }
 
   // Silently request an access token
   async getAccessToken(): Promise<string> {
-    let result = await this.msalService.acquireTokenSilent(OAuthSettings)
+    const account = this.msalService.instance.getAllAccounts()[0];
+    const result = await this.msalService
+      .acquireTokenSilent({
+        account: account ?? undefined,
+        scopes: OAuthSettings.scopes
+      })
+      .toPromise()
       .catch((reason) => {
         this.alertsService.addError('Get token failed', JSON.stringify(reason, null, 2));
       });
@@ -62,19 +72,19 @@ export class AuthService {
 
     // Couldn't get a token
     this.authenticated = false;
-    return null;
+    return '';
   }
 
-  // <getUserSnippet>
-  private async getUser(): Promise<User> {
-    if (!this.authenticated) return null;
+  // <GetUserSnippet>
+  private async getUser(): Promise<User | undefined> {
+    if (!this.authenticated) return undefined;
 
-    let graphClient = Client.init({
+    const graphClient = Client.init({
       // Initialize the Graph client with an auth
       // provider that requests the token from the
       // auth service
       authProvider: async(done) => {
-        let token = await this.getAccessToken()
+        const token = await this.getAccessToken()
           .catch((reason) => {
             done(reason, null);
           });
@@ -89,21 +99,21 @@ export class AuthService {
     });
 
     // Get the user from Graph (GET /me)
-    let graphUser: MicrosoftGraph.User = await graphClient
+    const graphUser: MicrosoftGraph.User = await graphClient
       .api('/me')
       .select('displayName,mail,mailboxSettings,userPrincipalName')
       .get();
 
-    let user = new User();
-    user.displayName = graphUser.displayName;
+    const user = new User();
+    user.displayName = graphUser.displayName ?? '';
     // Prefer the mail property, but fall back to userPrincipalName
-    user.email = graphUser.mail || graphUser.userPrincipalName;
-    user.timeZone = graphUser.mailboxSettings.timeZone;
+    user.email = graphUser.mail ?? graphUser.userPrincipalName ?? '';
+    user.timeZone = graphUser.mailboxSettings?.timeZone ?? 'UTC';
 
     // Use default avatar
     user.avatar = '/assets/no-profile-photo.png';
 
     return user;
   }
-  // </getUserSnippet>
+  // </GetUserSnippet>
 }

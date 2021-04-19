@@ -5,13 +5,14 @@ In this section, you'll create a new Angular project.
 1. Open your command-line interface (CLI), navigate to a directory where you have rights to create files, and run the following commands to install the [Angular CLI](https://www.npmjs.com/package/@angular/cli) tool and create a new Angular app.
 
     ```Shell
-    npm install -g @angular/cli@10.1.7
+    npm install -g @angular/cli@11.2.9
     ng new graph-tutorial
     ```
 
 1. The Angular CLI will prompt for more information. Answer the prompts as follows.
 
     ```Shell
+    ? Do you want to enforce stricter type checking and stricter bundle budgets in the workspace? Yes
     ? Would you like to add Angular routing? Yes
     ? Which stylesheet format would you like to use? CSS
     ```
@@ -38,9 +39,10 @@ Before moving on, install some additional packages that you will use later:
 1. Run the following commands in your CLI.
 
     ```Shell
-    npm install bootstrap@4.5.3 @ng-bootstrap/ng-bootstrap@7.0.0 msal@1.4.2 @azure/msal-angular@1.1.1
-    npm install moment@2.29.1 moment-timezone@0.5.31 windows-iana@4.2.1
-    npm install @microsoft/microsoft-graph-client@2.1.0 @microsoft/microsoft-graph-types@1.24.0
+    npm install bootstrap@4.6.0 @ng-bootstrap/ng-bootstrap@9.1.0
+    npm install @azure/msal-browser@2.14.0 @azure/msal-angular@2.0.0-beta.4
+    npm install moment-timezone@0.5.33 windows-iana@5.0.1
+    npm install @microsoft/microsoft-graph-client@2.2.1 @microsoft/microsoft-graph-types@1.35.0
     ```
 
 1. Run the following command in your CLI to add the Angular localization package (required by ng-bootstrap).
@@ -86,7 +88,7 @@ In this section you'll create the user interface for the app.
 
 1. Create a new file in the **./src/app** folder named **user.ts** and add the following code.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/user.ts" id="user":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/user.ts" id="UserSnippet":::
 
 1. Generate an Angular component for the top navigation on the page. In your CLI, run the following command.
 
@@ -109,19 +111,15 @@ In this section you'll create the user interface for the app.
     export class NavBarComponent implements OnInit {
 
       // Should the collapsed nav show?
-      showNav: boolean;
+      showNav: boolean = false;
       // Is a user logged in?
-      authenticated: boolean;
+      authenticated: boolean = false;
       // The user
-      user: User;
+      user?: User = undefined;
 
       constructor() { }
 
-      ngOnInit() {
-        this.showNav = false;
-        this.authenticated = false;
-        this.user = null;
-      }
+      ngOnInit() { }
 
       // Used by the Bootstrap navbar-toggler button to hide/show
       // the nav in a collapsed state
@@ -135,14 +133,15 @@ In this section you'll create the user interface for the app.
         this.user = {
           displayName: 'Adele Vance',
           email: 'AdeleV@contoso.com',
-          avatar: null
+          avatar: '',
+          timeZone: ''
         };
       }
 
       signOut(): void {
         // Temporary
         this.authenticated = false;
-        this.user = null;
+        this.user = undefined;
       }
     }
     ```
@@ -172,23 +171,22 @@ In this section you'll create the user interface for the app.
     export class HomeComponent implements OnInit {
 
       // Is a user logged in?
-      authenticated: boolean;
+      authenticated: boolean = false;
       // The user
-      user: any;
+      user?: User = undefined;
 
       constructor() { }
 
-      ngOnInit() {
-        this.authenticated = false;
-        this.user = {};
-      }
+      ngOnInit() { }
 
       signIn(): void {
         // Temporary
         this.authenticated = true;
         this.user = {
           displayName: 'Adele Vance',
-          email: 'AdeleV@contoso.com'
+          email: 'AdeleV@contoso.com',
+          avatar: '',
+          timeZone: ''
         };
       }
     }
@@ -200,7 +198,7 @@ In this section you'll create the user interface for the app.
 
 1. Create a simple `Alert` class. Create a new file in the **./src/app** directory named **alert.ts** and add the following code.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/alert.ts" id="alert":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/alert.ts" id="AlertSnippet":::
 
 1. Create an alert service that the app can use to display messages to the user. In your CLI, run the following command.
 
@@ -220,11 +218,11 @@ In this section you'll create the user interface for the app.
 
 1. Once the command completes, open **./src/app/alerts/alerts.component.ts** and replace its contents with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/alerts/alerts.component.ts" id="alertComponent":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/alerts/alerts.component.ts" id="AlertsComponentSnippet":::
 
 1. Open **./src/app/alerts/alerts.component.html** and replace its contents with the following.
 
-    :::code language="html" source="../demo/graph-tutorial/src/app/alerts/alerts.component.html" id="alertHtml":::
+    :::code language="html" source="../demo/graph-tutorial/src/app/alerts/alerts.component.html" id="AlertHtml":::
 
 1. Open **./src/app/app-routing.module.ts** and replace the `const routes: Routes = [];` line with the following code.
 
@@ -238,7 +236,7 @@ In this section you'll create the user interface for the app.
 
 1. Open **./src/app/app.component.html** and replace its entire contents with the following.
 
-    :::code language="html" source="../demo/graph-tutorial/src/app/app.component.html" id="appHtml":::
+    :::code language="html" source="../demo/graph-tutorial/src/app/app.component.html" id="AppHtml":::
 
 1. Add an image file of your choosing named **no-profile-photo.png** in the **./src/assets** directory. This image will be used as the user's photo when the user has no photo in Microsoft Graph.
 

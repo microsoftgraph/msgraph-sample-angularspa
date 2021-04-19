@@ -13,11 +13,11 @@
   </thead>
   <tbody>
     <tr *ngFor="let event of events">
-      <td>{{event.organizer.emailAddress.name}}</td>
+      <td>{{event.organizer?.emailAddress?.name}}</td>
       <td>{{event.subject}}</td>
       <!-- Use 'UTC' in the pipe to date so Angular will not convert the
-           already converted time to local time. See
-           https://angular.io/api/common/DatePipe -->
+            already converted time to local time. See
+            https://angular.io/api/common/DatePipe -->
       <td>{{formatDateTimeTimeZone(event.start) | date:'short' : 'UTC' }}</td>
       <td>{{formatDateTimeTimeZone(event.end) | date: 'short' : 'UTC' }}</td>
     </tr>

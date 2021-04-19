@@ -14,13 +14,26 @@ In this exercise you will extend the application from the previous exercise to s
 1. Open **./src/app/app.module.ts** and add the following `import` statements to the top of the file.
 
     ```typescript
-    import { MsalModule } from '@azure/msal-angular';
+    import { IPublicClientApplication,
+             PublicClientApplication,
+             BrowserCacheLocation } from '@azure/msal-browser';
+    import { MsalModule,
+             MsalService,
+             MSAL_INSTANCE } from '@azure/msal-angular';
     import { OAuthSettings } from '../oauth';
     ```
 
-1. Add the `MsalModule` to the `imports` array inside the `@NgModule` declaration, and initialize it with the app ID.
+1. Add the following function below the `import` statements.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="imports" highlight="6-11":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="MSALFactorySnippet":::
+
+1. Add the `MsalModule` to the `imports` array inside the `@NgModule` declaration.
+
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="ImportsSnippet" highlight="6":::
+
+1. Add the `MSALInstanceFactory` and `MsalService` to the `providers` array inside the `@NgModule` declaration.
+
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="ProvidersSnippet" highlight="2-5":::
 
 ## Implement sign-in
 
@@ -38,6 +51,7 @@ In this section you'll create an authentication service and implement sign-in an
 
     ```typescript
     import { Injectable } from '@angular/core';
+    import { AccountInfo } from '@azure/msal-browser';
     import { MsalService } from '@azure/msal-angular';
 
     import { AlertsService } from './alerts.service';
@@ -50,25 +64,29 @@ In this section you'll create an authentication service and implement sign-in an
 
     export class AuthService {
       public authenticated: boolean;
-      public user: User;
+      public user?: User;
 
       constructor(
         private msalService: MsalService,
         private alertsService: AlertsService) {
 
         this.authenticated = false;
-        this.user = null;
+        this.user = undefined;
       }
 
       // Prompt the user to sign in and
       // grant consent to the requested permission scopes
       async signIn(): Promise<void> {
-        let result = await this.msalService.loginPopup(OAuthSettings)
+        const result = await this.msalService
+          .loginPopup(OAuthSettings)
+          .toPromise()
           .catch((reason) => {
-            this.alertsService.addError('Login failed', JSON.stringify(reason, null, 2));
+            this.alertsService.addError('Login failed',
+              JSON.stringify(reason, null, 2));
           });
 
         if (result) {
+          this.msalService.instance.setActiveAccount(result.account);
           this.authenticated = true;
           // Temporary placeholder
           this.user = new User();
@@ -79,15 +97,19 @@ In this section you'll create an authentication service and implement sign-in an
       }
 
       // Sign out
-      signOut(): void {
-        this.msalService.logout();
-        this.user = null;
+      async signOut(): Promise<void> {
+        await this.msalService.logout().toPromise();
+        this.user = undefined;
         this.authenticated = false;
       }
 
       // Silently request an access token
       async getAccessToken(): Promise<string> {
-        let result = await this.msalService.acquireTokenSilent(OAuthSettings)
+        const result = await this.msalService
+          .acquireTokenSilent({
+            scopes: OAuthSettings.scopes
+          })
+          .toPromise()
           .catch((reason) => {
             this.alertsService.addError('Get token failed', JSON.stringify(reason, null, 2));
           });
@@ -100,14 +122,14 @@ In this section you'll create an authentication service and implement sign-in an
 
         // Couldn't get a token
         this.authenticated = false;
-        return null;
+        return '';
       }
     }
     ```
 
 1. Open **./src/app/nav-bar/nav-bar.component.ts** and replace its contents with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/nav-bar/nav-bar.component.ts" id="navBarSnippet" highlight="3,15-22,24,26-28,36-38,40-42":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/nav-bar/nav-bar.component.ts" id="navBarSnippet" highlight="3,15-22,24,34-36,38-40":::
 
 1. Open **./src/app/home/home.component.ts** and replace its contents with the following.
 
@@ -128,7 +150,7 @@ Right now the authentication service sets constant values for the user's display
 
 1. Add a new function to the `AuthService` class called `getUser`.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="getUserSnippet":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="GetUserSnippet":::
 
 1. Locate and remove the following code in the `getAccessToken` method that adds an alert to display the access token.
 
@@ -157,11 +179,11 @@ Right now the authentication service sets constant values for the user's display
 
 1. Change the `constructor` for the `AuthService` class to check if the user is already logged in and load their details if so. Replace the existing `constructor` with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="constructorSnippet" highlight="5-6":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="ConstructorSnippet" highlight="5-7":::
 
 1. Remove the temporary code from the `HomeComponent` class. Open **./src/app/home/home.component.ts** and replace the existing `signIn` function with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="signInSnippet":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="SignInSnippet":::
 
 Now if you save your changes and start the app, after sign-in you should end up back on the home page, but the UI should change to indicate that you are signed-in.
 

@@ -33,7 +33,7 @@ export class NewEvent {
 
       const emails = this.attendees.split(';');
       emails.forEach(email => {
-        graphEvent.attendees.push({
+        graphEvent.attendees?.push({
           type: 'required',
           emailAddress: {
             address: email
