@@ -11,7 +11,7 @@
            [(ngModel)]="model.subject" name="subject"
            #name="ngModel">
     <div [hidden]="name.valid || name.pristine"
-         class="alert alert-danger">Subject is required</div>
+          class="alert alert-danger">Subject is required</div>
   </div>
   <div class="form-group">
     <label for="attendees">Attendees</label>
@@ -25,9 +25,9 @@
       <div class="form-group">
         <label for="start">Start</label>
         <input type="datetime-local" class="form-control" id="start"
-              required
-              [(ngModel)]="model.start" name="start"
-              #name="ngModel">
+               required
+               [(ngModel)]="model.start" name="start"
+               #name="ngModel">
         <div [hidden]="name.valid || name.pristine"
              class="alert alert-danger">Start is required</div>
       </div>
@@ -36,9 +36,9 @@
       <div class="form-group">
         <label for="end">End</label>
         <input type="datetime-local" class="form-control" id="end"
-              required
-              [(ngModel)]="model.end" name="end"
-              #name="ngModel">
+               required
+               [(ngModel)]="model.end" name="end"
+               #name="ngModel">
         <div [hidden]="name.valid || name.pristine"
              class="alert alert-danger">End is required</div>
       </div>

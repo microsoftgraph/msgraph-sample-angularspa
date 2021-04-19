@@ -183,7 +183,7 @@ Right now the authentication service sets constant values for the user's display
 
 1. Remove the temporary code from the `HomeComponent` class. Open **./src/app/home/home.component.ts** and replace the existing `signIn` function with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="signInSnippet":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="SignInSnippet":::
 
 Now if you save your changes and start the app, after sign-in you should end up back on the home page, but the UI should change to indicate that you are signed-in.
 

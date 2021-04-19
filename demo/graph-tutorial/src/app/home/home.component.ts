@@ -17,17 +17,17 @@ export class HomeComponent implements OnInit {
     return this.authService.authenticated;
   }
   // The user
-  get user(): User {
+  get user(): User | undefined {
     return this.authService.user;
   }
 
   constructor(private authService: AuthService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  // <signInSnippet>
+  // <SignInSnippet>
   async signIn(): Promise<void> {
     await this.authService.signIn();
   }
-  // </signInSnippet>
+  // </SignInSnippet>
 }

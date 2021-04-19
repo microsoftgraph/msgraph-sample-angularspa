@@ -23,7 +23,7 @@ export class GraphService {
     this.graphClient = Client.init({
       authProvider: async (done) => {
         // Get the token from the auth service
-        let token = await this.authService.getAccessToken()
+        const token = await this.authService.getAccessToken()
           .catch((reason) => {
             done(reason, null);
           });
@@ -38,13 +38,13 @@ export class GraphService {
     });
   }
 
-  async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[]> {
+  async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
     try {
       // GET /me/calendarview?startDateTime=''&endDateTime=''
       // &$select=subject,organizer,start,end
       // &$orderby=start/dateTime
       // &$top=50
-      let result =  await this.graphClient
+      const result =  await this.graphClient
         .api('/me/calendarview')
         .header('Prefer', `outlook.timezone="${timeZone}"`)
         .query({
@@ -60,6 +60,7 @@ export class GraphService {
     } catch (error) {
       this.alertsService.addError('Could not get events', JSON.stringify(error, null, 2));
     }
+    return undefined;
   }
 
   // <AddEventSnippet>

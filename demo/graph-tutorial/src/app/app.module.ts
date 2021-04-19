@@ -5,7 +5,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MsalModule } from '@azure/msal-angular';
+import { IPublicClientApplication,
+         PublicClientApplication,
+         BrowserCacheLocation } from '@azure/msal-browser';
+import { MsalModule,
+         MsalService,
+         MSAL_INSTANCE } from '@azure/msal-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +21,25 @@ import { OAuthSettings } from '../oauth';
 import { CalendarComponent } from './calendar/calendar.component';
 import { NewEventComponent } from './new-event/new-event.component';
 
+// <MSALFactorySnippet>
+let msalInstance: IPublicClientApplication | undefined = undefined;
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  msalInstance = msalInstance ?? new PublicClientApplication({
+    auth: {
+      clientId: OAuthSettings.appId,
+      redirectUri: OAuthSettings.redirectUri,
+      postLogoutRedirectUri: OAuthSettings.redirectUri
+    },
+    cache: {
+      cacheLocation: BrowserCacheLocation.LocalStorage,
+    }
+  });
+
+  return msalInstance;
+}
+// </MSALFactorySnippet>
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,21 +49,24 @@ import { NewEventComponent } from './new-event/new-event.component';
     CalendarComponent,
     NewEventComponent
   ],
-  // <imports>
+  // <ImportsSnippet>
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     NgbModule,
-    MsalModule.forRoot({
-      auth: {
-        clientId: OAuthSettings.appId,
-        redirectUri: OAuthSettings.redirectUri
-      }
-    })
+    MsalModule
   ],
-  // </imports>
-  providers: [],
+  // </ImportsSnippet>
+  // <ProvidersSnippet>
+  providers: [
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory
+    },
+    MsalService
+  ],
+  // <//ProvidersSnippet>
   bootstrap: [AppComponent]
 })
 export class AppModule { }

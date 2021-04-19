@@ -27,7 +27,7 @@ export class NewEventComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const timeZone = this.authService.user.timeZone;
+    const timeZone = this.authService.user?.timeZone ?? 'UTC';
     const graphEvent = this.model.getGraphEvent(timeZone);
 
     this.graphService.addEventToCalendar(graphEvent)

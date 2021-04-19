@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// <alert>
+// <AlertSnippet>
 export class Alert {
-  type: string;
-  message: string;
-  debug: string;
+  type!: string;
+  message!: string;
+  debug!: string;
 }
-//</alert>
+//</AlertSnippet>

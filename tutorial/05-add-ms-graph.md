@@ -37,7 +37,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
         this.graphClient = Client.init({
           authProvider: async (done) => {
             // Get the token from the auth service
-            let token = await this.authService.getAccessToken()
+            const token = await this.authService.getAccessToken()
               .catch((reason) => {
                 done(reason, null);
               });
@@ -52,13 +52,13 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
         });
       }
 
-      async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[]> {
+      async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
         try {
           // GET /me/calendarview?startDateTime=''&endDateTime=''
           // &$select=subject,organizer,start,end
           // &$orderby=start/dateTime
           // &$top=50
-          let result =  await this.graphClient
+          const result =  await this.graphClient
             .api('/me/calendarview')
             .header('Prefer', `outlook.timezone="${timeZone}"`)
             .query({
@@ -74,6 +74,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
         } catch (error) {
           this.alertsService.addError('Could not get events', JSON.stringify(error, null, 2));
         }
+        return undefined;
       }
     }
     ```
@@ -101,8 +102,14 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
     const routes: Routes = [
       { path: '', component: HomeComponent },
-      { path: 'calendar', component: CalendarComponent }
+      { path: 'calendar', component: CalendarComponent },
     ];
+    ```
+
+1. Open **./tsconfig.json** and add the following property to the `compilerOptions` object.
+
+    ```json
+    "resolveJsonModule": true
     ```
 
 1. Open **./src/app/calendar/calendar.component.ts** and replace its contents with the following.
@@ -110,7 +117,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
     ```typescript
     import { Component, OnInit } from '@angular/core';
     import * as moment from 'moment-timezone';
-    import { findOneIana } from 'windows-iana';
+    import { findIana } from 'windows-iana';
     import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
     import { AuthService } from '../auth.service';
@@ -124,7 +131,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
     })
     export class CalendarComponent implements OnInit {
 
-      public events: MicrosoftGraph.Event[];
+      public events?: MicrosoftGraph.Event[];
 
       constructor(
         private authService: AuthService,
@@ -133,8 +140,8 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
       ngOnInit() {
         // Convert the user's timezone to IANA format
-        const ianaName = findOneIana(this.authService.user.timeZone);
-        const timeZone = ianaName!.valueOf() || this.authService.user.timeZone;
+        const ianaName = findIana(this.authService.user?.timeZone ?? 'UTC');
+        const timeZone = ianaName![0].valueOf() || this.authService.user?.timeZone || 'UTC';
 
         // Get midnight on the start of the current week in the user's timezone,
         // but in UTC. For example, for Pacific Standard Time, the time value would be
@@ -145,7 +152,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
         this.graphService.getCalendarView(
           startOfWeek.format(),
           endOfWeek.format(),
-          this.authService.user.timeZone)
+          this.authService.user?.timeZone ?? 'UTC')
             .then((events) => {
               this.events = events;
               // Temporary to display raw results
