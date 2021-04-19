@@ -133,7 +133,7 @@ In this section you'll create an authentication service and implement sign-in an
 
 1. Open **./src/app/home/home.component.ts** and replace its contents with the following.
 
-    :::code language="typescript" source="snippets/snippets.ts" id="homeSnippet" highlight="3,12-19,21,23,25-32":::
+    :::code language="typescript" source="snippets/snippets.ts" id="homeSnippet" highlight="3,13-20,22,26-33":::
 
 Save your changes and refresh the browser. Click the **Click here to sign in** button and you should be redirected to `https://login.microsoftonline.com`. Login with your Microsoft account and consent to the requested permissions. The app page should refresh, showing the token.
 

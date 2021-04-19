@@ -66,7 +66,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     },
     MsalService
   ],
-  // <//ProvidersSnippet>
+  // </ProvidersSnippet>
   bootstrap: [AppComponent]
 })
 export class AppModule { }
