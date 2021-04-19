@@ -4,7 +4,7 @@
 
 To run the completed project in this folder, you need the following:
 
-- [Node.js](https://nodejs.org) installed on your development machine. If you do not have Node.js, visit the previous link for download options. (**Note:** This tutorial was written with Node version 12.16.1. The steps in this guide may work with other versions, but that has not been tested.)
+- [Node.js](https://nodejs.org) installed on your development machine. If you do not have Node.js, visit the previous link for download options. (**Note:** This tutorial was written with Node version 14.15.0. The steps in this guide may work with other versions, but that has not been tested.)
 - [Angular CLI](https://cli.angular.io/) installed on your development machine.
 - Either a personal Microsoft account with a mailbox on Outlook.com, or a Microsoft work or school account.
 
@@ -25,17 +25,13 @@ If you don't have a Microsoft account, there are a couple of options to get a fr
 
     - Set **Name** to `Angular Graph Tutorial`.
     - Set **Supported account types** to **Accounts in any organizational directory and personal Microsoft accounts**.
-    - Under **Redirect URI**, set the first drop-down to `Web` and set the value to `http://localhost:4200`.
+    - Under **Redirect URI**, set the first drop-down to `Single-page application (SPA)` and set the value to `http://localhost:4200`.
 
     ![A screenshot of the Register an application page](/tutorial/images/aad-register-an-app.png)
 
 1. Choose **Register**. On the **Angular Graph Tutorial** page, copy the value of the **Application (client) ID** and save it, you will need it in the next step.
 
     ![A screenshot of the application ID of the new app registration](/tutorial/images/aad-application-id.png)
-
-1. Select **Authentication** under **Manage**. Locate the **Implicit grant** section and enable **Access tokens** and **ID tokens**. Choose **Save**.
-
-    ![A screenshot of the Implicit grant section](/tutorial/images/aad-implicit-grant.png)
 
 ## Configure the sample
 
