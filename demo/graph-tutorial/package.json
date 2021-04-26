@@ -28,7 +28,7 @@
     "moment-timezone": "^0.5.33",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "windows-iana": "^4.2.1",
+    "windows-iana": "^5.0.2",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
