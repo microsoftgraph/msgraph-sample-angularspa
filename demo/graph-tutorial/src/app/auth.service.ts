@@ -23,9 +23,12 @@ export class AuthService {
     private msalService: MsalService,
     private alertsService: AlertsService) {
 
-      this.authenticated = this.msalService.instance
-        .getAllAccounts().length > 0;
-      this.getUser().then((user) => {this.user = user});
+    const accounts = this.msalService.instance.getAllAccounts();
+    this.authenticated = accounts.length > 0;
+    if (this.authenticated) {
+      this.msalService.instance.setActiveAccount(accounts[0]);
+    }
+    this.getUser().then((user) => {this.user = user});
   }
   // </ConstructorSnippet>
 
@@ -41,6 +44,7 @@ export class AuthService {
       });
 
     if (result) {
+      this.msalService.instance.setActiveAccount(result.account);
       this.authenticated = true;
       this.user = await this.getUser();
     }
@@ -55,10 +59,8 @@ export class AuthService {
 
   // Silently request an access token
   async getAccessToken(): Promise<string> {
-    const account = this.msalService.instance.getAllAccounts()[0];
     const result = await this.msalService
       .acquireTokenSilent({
-        account: account ?? undefined,
         scopes: OAuthSettings.scopes
       })
       .toPromise()

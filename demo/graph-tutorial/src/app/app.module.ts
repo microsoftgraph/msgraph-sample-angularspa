@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { IPublicClientApplication,
          PublicClientApplication,
          BrowserCacheLocation } from '@azure/msal-browser';
@@ -14,6 +13,7 @@ import { MsalModule,
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HomeComponent } from './home/home.component';
 import { AlertsComponent } from './alerts/alerts.component';
@@ -52,9 +52,9 @@ export function MSALInstanceFactory(): IPublicClientApplication {
   // <ImportsSnippet>
   imports: [
     BrowserModule,
-    FormsModule,
     AppRoutingModule,
     NgbModule,
+    FormsModule,
     MsalModule
   ],
   // </ImportsSnippet>

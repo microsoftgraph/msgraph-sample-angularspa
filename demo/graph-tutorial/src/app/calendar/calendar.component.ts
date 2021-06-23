@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment-timezone';
+import { parseISO } from 'date-fns';
+import { endOfWeek, startOfWeek } from 'date-fns/esm';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { findIana } from 'windows-iana';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
@@ -25,7 +27,7 @@ export class CalendarComponent implements OnInit {
     private alertsService: AlertsService) { }
 
   // <ngOnInitSnippet>
-  ngOnInit() {
+  async ngOnInit() {
     // Convert the user's timezone to IANA format
     const ianaName = findIana(this.authService.user?.timeZone ?? 'UTC');
     const timeZone = ianaName![0].valueOf() || this.authService.user?.timeZone || 'UTC';
@@ -33,33 +35,29 @@ export class CalendarComponent implements OnInit {
     // Get midnight on the start of the current week in the user's timezone,
     // but in UTC. For example, for Pacific Standard Time, the time value would be
     // 07:00:00Z
-    var startOfWeek = moment.tz(timeZone).startOf('week').utc();
-    var endOfWeek = moment(startOfWeek).add(7, 'day');
+    const now = new Date();
+    const weekStart = zonedTimeToUtc(startOfWeek(now), timeZone);
+    const weekEnd = zonedTimeToUtc(endOfWeek(now), timeZone);
 
-    this.graphService.getCalendarView(
-      startOfWeek.format(),
-      endOfWeek.format(),
-      this.authService.user?.timeZone ?? 'UTC')
-        .then((events) => {
-          this.events = events;
-        });
+    this.events = await this.graphService.getCalendarView(
+      weekStart.toISOString(),
+      weekEnd.toISOString(),
+      this.authService.user?.timeZone ?? 'UTC');
   }
   // </ngOnInitSnippet>
 
   // <formatDateTimeTimeZoneSnippet>
-  formatDateTimeTimeZone(dateTime: MicrosoftGraph.DateTimeTimeZone | undefined | null): string {
+  formatDateTimeTimeZone(dateTime: MicrosoftGraph.DateTimeTimeZone | undefined | null): Date | undefined {
     if (dateTime == undefined || dateTime == null) {
-      return '';
+      return undefined;
     }
 
     try {
-      // Pass UTC for the time zone because the value
-      // is already adjusted to the user's time zone
-      return moment.tz(dateTime.dateTime, 'UTC').format();
+      return parseISO(dateTime.dateTime!);
     }
     catch(error) {
       this.alertsService.addError('DateTimeTimeZone conversion error', JSON.stringify(error));
-      return '';
+      return undefined;
     }
   }
   // </formatDateTimeTimeZoneSnippet>

@@ -14,6 +14,7 @@ In this exercise you will extend the application from the previous exercise to s
 1. Open **./src/app/app.module.ts** and add the following `import` statements to the top of the file.
 
     ```typescript
+    import { FormsModule } from '@angular/forms';
     import { IPublicClientApplication,
              PublicClientApplication,
              BrowserCacheLocation } from '@azure/msal-browser';
@@ -27,9 +28,9 @@ In this exercise you will extend the application from the previous exercise to s
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="MSALFactorySnippet":::
 
-1. Add the `MsalModule` to the `imports` array inside the `@NgModule` declaration.
+1. Add `MsalModule` and `FormsModule` to the `imports` array inside the `@NgModule` declaration.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="ImportsSnippet" highlight="6":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="ImportsSnippet" highlight="5-6":::
 
 1. Add the `MSALInstanceFactory` and `MsalService` to the `providers` array inside the `@NgModule` declaration.
 
@@ -179,7 +180,7 @@ Right now the authentication service sets constant values for the user's display
 
 1. Change the `constructor` for the `AuthService` class to check if the user is already logged in and load their details if so. Replace the existing `constructor` with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="ConstructorSnippet" highlight="5-7":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="ConstructorSnippet" highlight="5-11":::
 
 1. Remove the temporary code from the `HomeComponent` class. Open **./src/app/home/home.component.ts** and replace the existing `signIn` function with the following.
 

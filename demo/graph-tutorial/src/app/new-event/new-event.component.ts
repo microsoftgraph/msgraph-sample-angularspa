@@ -26,16 +26,16 @@ export class NewEventComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const timeZone = this.authService.user?.timeZone ?? 'UTC';
     const graphEvent = this.model.getGraphEvent(timeZone);
 
-    this.graphService.addEventToCalendar(graphEvent)
-      .then(() => {
-        this.alertsService.addSuccess('Event created.');
-      }).catch(error => {
-        this.alertsService.addError('Error creating event.', error.message);
-      });
+    try {
+      await this.graphService.addEventToCalendar(graphEvent);
+      this.alertsService.addSuccess('Event created.');
+    } catch (error) {
+      this.alertsService.addError('Error creating event.', error.message);
+    }
   }
 }
 // </NewEventComponentSnippet>
