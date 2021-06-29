@@ -1,6 +1,6 @@
 {
   "sourceDirectory": "./demo",
-  "exampleConfigFile": "./graph-tutorial/src/oauth.ts.example",
+  "exampleConfigFile": "./graph-tutorial/src/oauth.example.ts",
   "configFile": "oauth.ts",
   "archiveFile": "AngularQuickStart.zip",
   "zipReadMe": "./README.md"
