@@ -5,7 +5,7 @@ In this section, you'll create a new Angular project.
 1. Open your command-line interface (CLI), navigate to a directory where you have rights to create files, and run the following commands to install the [Angular CLI](https://www.npmjs.com/package/@angular/cli) tool and create a new Angular app.
 
     ```Shell
-    npm install -g @angular/cli@12.0.5
+    npm install -g @angular/cli
     ng new graph-tutorial
     ```
 
@@ -38,9 +38,10 @@ Before moving on, install some additional packages that you will use later:
 
     ```Shell
     ng add @ng-bootstrap/ng-bootstrap
-    npm install @azure/msal-browser@2.14.2 @azure/msal-angular@2.0.0
-    npm install date-fns@2.22.1 date-fns-tz@1.1.4 windows-iana@5.0.2
-    npm install @microsoft/microsoft-graph-client@3.0.0-Preview.2 @microsoft/microsoft-graph-types@1.41.0
+    npm install @azure/msal-browser@2.16.1 @azure/msal-angular@2.0.2
+    npm install date-fns@2.23.0 date-fns-tz@1.1.6 windows-iana@5.0.2
+    npm install @microsoft/microsoft-graph-client@3.0.0
+    npm install @microsoft/microsoft-graph-types --save-dev
     ```
 
 ## Design the app
