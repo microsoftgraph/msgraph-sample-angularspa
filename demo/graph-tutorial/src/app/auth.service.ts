@@ -3,7 +3,9 @@
 
 import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
+import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { Client } from '@microsoft/microsoft-graph-client';
+import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
 import { AlertsService } from './alerts.service';
@@ -17,15 +19,19 @@ import { User } from './user';
 export class AuthService {
   public authenticated: boolean;
   public user?: User;
+  public graphClient?: Client;
 
   // <ConstructorSnippet>
   constructor(
     private msalService: MsalService,
     private alertsService: AlertsService) {
 
-      this.authenticated = this.msalService.instance
-        .getAllAccounts().length > 0;
-      this.getUser().then((user) => {this.user = user});
+    const accounts = this.msalService.instance.getAllAccounts();
+    this.authenticated = accounts.length > 0;
+    if (this.authenticated) {
+      this.msalService.instance.setActiveAccount(accounts[0]);
+    }
+    this.getUser().then((user) => {this.user = user});
   }
   // </ConstructorSnippet>
 
@@ -41,6 +47,7 @@ export class AuthService {
       });
 
     if (result) {
+      this.msalService.instance.setActiveAccount(result.account);
       this.authenticated = true;
       this.user = await this.getUser();
     }
@@ -50,56 +57,31 @@ export class AuthService {
   async signOut(): Promise<void> {
     await this.msalService.logout().toPromise();
     this.user = undefined;
+    this.graphClient = undefined;
     this.authenticated = false;
-  }
-
-  // Silently request an access token
-  async getAccessToken(): Promise<string> {
-    const account = this.msalService.instance.getAllAccounts()[0];
-    const result = await this.msalService
-      .acquireTokenSilent({
-        account: account ?? undefined,
-        scopes: OAuthSettings.scopes
-      })
-      .toPromise()
-      .catch((reason) => {
-        this.alertsService.addError('Get token failed', JSON.stringify(reason, null, 2));
-      });
-
-    if (result) {
-      return result.accessToken;
-    }
-
-    // Couldn't get a token
-    this.authenticated = false;
-    return '';
   }
 
   // <GetUserSnippet>
   private async getUser(): Promise<User | undefined> {
     if (!this.authenticated) return undefined;
 
-    const graphClient = Client.init({
-      // Initialize the Graph client with an auth
-      // provider that requests the token from the
-      // auth service
-      authProvider: async(done) => {
-        const token = await this.getAccessToken()
-          .catch((reason) => {
-            done(reason, null);
-          });
-
-        if (token)
-        {
-          done(null, token);
-        } else {
-          done("Could not get an access token", null);
-        }
+    // Create an authentication provider for the current user
+    const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(
+      this.msalService.instance as PublicClientApplication,
+      {
+        account: this.msalService.instance.getActiveAccount()!,
+        scopes: OAuthSettings.scopes,
+        interactionType: InteractionType.Popup
       }
+    );
+
+    // Initialize the Graph client
+    this.graphClient = Client.initWithMiddleware({
+      authProvider: authProvider
     });
 
     // Get the user from Graph (GET /me)
-    const graphUser: MicrosoftGraph.User = await graphClient
+    const graphUser: MicrosoftGraph.User = await this.graphClient
       .api('/me')
       .select('displayName,mail,mailboxSettings,userPrincipalName')
       .get();

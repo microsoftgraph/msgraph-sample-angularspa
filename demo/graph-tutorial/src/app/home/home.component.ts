@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// <homeSnippet>
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
@@ -25,9 +26,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() { }
 
-  // <SignInSnippet>
   async signIn(): Promise<void> {
     await this.authService.signIn();
   }
-  // </SignInSnippet>
 }
+// </homeSnippet>

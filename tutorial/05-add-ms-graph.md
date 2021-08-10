@@ -16,7 +16,6 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
     ```typescript
     import { Injectable } from '@angular/core';
-    import { Client } from '@microsoft/microsoft-graph-client';
     import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
     import { AuthService } from './auth.service';
@@ -28,37 +27,22 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
 
     export class GraphService {
 
-      private graphClient: Client;
       constructor(
         private authService: AuthService,
-        private alertsService: AlertsService) {
-
-        // Initialize the Graph client
-        this.graphClient = Client.init({
-          authProvider: async (done) => {
-            // Get the token from the auth service
-            const token = await this.authService.getAccessToken()
-              .catch((reason) => {
-                done(reason, null);
-              });
-
-            if (token)
-            {
-              done(null, token);
-            } else {
-              done("Could not get an access token", null);
-            }
-          }
-        });
-      }
+        private alertsService: AlertsService) {}
 
       async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
+        if (!this.authService.graphClient) {
+          this.alertsService.addError('Graph client is not initialized.');
+          return undefined;
+        }
+
         try {
           // GET /me/calendarview?startDateTime=''&endDateTime=''
           // &$select=subject,organizer,start,end
           // &$orderby=start/dateTime
           // &$top=50
-          const result =  await this.graphClient
+          const result =  await this.authService.graphClient
             .api('/me/calendarview')
             .header('Prefer', `outlook.timezone="${timeZone}"`)
             .query({
@@ -106,17 +90,13 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
     ];
     ```
 
-1. Open **./tsconfig.json** and add the following property to the `compilerOptions` object.
-
-    ```json
-    "resolveJsonModule": true
-    ```
-
 1. Open **./src/app/calendar/calendar.component.ts** and replace its contents with the following.
 
     ```typescript
     import { Component, OnInit } from '@angular/core';
-    import * as moment from 'moment-timezone';
+    import { parseISO } from 'date-fns';
+    import { endOfWeek, startOfWeek } from 'date-fns/esm';
+    import { zonedTimeToUtc } from 'date-fns-tz';
     import { findIana } from 'windows-iana';
     import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
@@ -138,7 +118,7 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
         private graphService: GraphService,
         private alertsService: AlertsService) { }
 
-      ngOnInit() {
+      async ngOnInit() {
         // Convert the user's timezone to IANA format
         const ianaName = findIana(this.authService.user?.timeZone ?? 'UTC');
         const timeZone = ianaName![0].valueOf() || this.authService.user?.timeZone || 'UTC';
@@ -146,18 +126,17 @@ In this exercise you will incorporate the Microsoft Graph into the application. 
         // Get midnight on the start of the current week in the user's timezone,
         // but in UTC. For example, for Pacific Standard Time, the time value would be
         // 07:00:00Z
-        var startOfWeek = moment.tz(timeZone).startOf('week').utc();
-        var endOfWeek = moment(startOfWeek).add(7, 'day');
+        const now = new Date();
+        const weekStart = zonedTimeToUtc(startOfWeek(now), timeZone);
+        const weekEnd = zonedTimeToUtc(endOfWeek(now), timeZone);
 
-        this.graphService.getCalendarView(
-          startOfWeek.format(),
-          endOfWeek.format(),
-          this.authService.user?.timeZone ?? 'UTC')
-            .then((events) => {
-              this.events = events;
-              // Temporary to display raw results
-              this.alertsService.addSuccess('Events from Graph', JSON.stringify(events, null, 2));
-            });
+        this.events = await this.graphService.getCalendarView(
+          weekStart.toISOString(),
+          weekEnd.toISOString(),
+          this.authService.user?.timeZone ?? 'UTC');
+
+          // Temporary to display raw results
+          this.alertsService.addSuccess('Events from Graph', JSON.stringify(events, null, 2));
       }
     }
     ```

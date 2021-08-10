@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { Injectable } from '@angular/core';
-import { Client } from '@microsoft/microsoft-graph-client';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
 import { AuthService } from './auth.service';
@@ -14,37 +13,22 @@ import { AlertsService } from './alerts.service';
 
 export class GraphService {
 
-  private graphClient: Client;
   constructor(
     private authService: AuthService,
-    private alertsService: AlertsService) {
-
-    // Initialize the Graph client
-    this.graphClient = Client.init({
-      authProvider: async (done) => {
-        // Get the token from the auth service
-        const token = await this.authService.getAccessToken()
-          .catch((reason) => {
-            done(reason, null);
-          });
-
-        if (token)
-        {
-          done(null, token);
-        } else {
-          done("Could not get an access token", null);
-        }
-      }
-    });
-  }
+    private alertsService: AlertsService) {}
 
   async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
+    if (!this.authService.graphClient) {
+      this.alertsService.addError('Graph client is not initialized.');
+      return undefined;
+    }
+
     try {
       // GET /me/calendarview?startDateTime=''&endDateTime=''
       // &$select=subject,organizer,start,end
       // &$orderby=start/dateTime
       // &$top=50
-      const result =  await this.graphClient
+      const result =  await this.authService.graphClient
         .api('/me/calendarview')
         .header('Prefer', `outlook.timezone="${timeZone}"`)
         .query({
@@ -65,9 +49,14 @@ export class GraphService {
 
   // <AddEventSnippet>
   async addEventToCalendar(newEvent: MicrosoftGraph.Event): Promise<void> {
+    if (!this.authService.graphClient) {
+      this.alertsService.addError('Graph client is not initialized.');
+      return undefined;
+    }
+
     try {
       // POST /me/events
-      await this.graphClient
+      await this.authService.graphClient
         .api('/me/events')
         .post(newEvent);
     } catch (error) {

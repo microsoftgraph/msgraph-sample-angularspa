@@ -5,14 +5,13 @@ In this section, you'll create a new Angular project.
 1. Open your command-line interface (CLI), navigate to a directory where you have rights to create files, and run the following commands to install the [Angular CLI](https://www.npmjs.com/package/@angular/cli) tool and create a new Angular app.
 
     ```Shell
-    npm install -g @angular/cli@11.2.9
+    npm install -g @angular/cli
     ng new graph-tutorial
     ```
 
 1. The Angular CLI will prompt for more information. Answer the prompts as follows.
 
     ```Shell
-    ? Do you want to enforce stricter type checking and stricter bundle budgets in the workspace? Yes
     ? Would you like to add Angular routing? Yes
     ? Which stylesheet format would you like to use? CSS
     ```
@@ -29,7 +28,6 @@ In this section, you'll create a new Angular project.
 
 Before moving on, install some additional packages that you will use later:
 
-- [bootstrap](https://github.com/twbs/bootstrap) for styling and common components.
 - [ng-bootstrap](https://github.com/ng-bootstrap/ng-bootstrap) for using Bootstrap components from Angular.
 - [moment](https://github.com/moment/moment) for formatting dates and times.
 - [windows-iana](https://github.com/rubenillodo/windows-iana)
@@ -39,16 +37,11 @@ Before moving on, install some additional packages that you will use later:
 1. Run the following commands in your CLI.
 
     ```Shell
-    npm install bootstrap@4.6.0 @ng-bootstrap/ng-bootstrap@9.1.0
-    npm install @azure/msal-browser@2.14.0 @azure/msal-angular@2.0.0-beta.4
-    npm install moment-timezone@0.5.33 windows-iana@5.0.2
-    npm install @microsoft/microsoft-graph-client@2.2.1 @microsoft/microsoft-graph-types@1.35.0
-    ```
-
-1. Run the following command in your CLI to add the Angular localization package (required by ng-bootstrap).
-
-    ```Shell
-    ng add @angular/localize
+    ng add @ng-bootstrap/ng-bootstrap
+    npm install @azure/msal-browser@2.16.1 @azure/msal-angular@2.0.2
+    npm install date-fns@2.23.0 date-fns-tz@1.1.6 windows-iana@5.0.2
+    npm install @microsoft/microsoft-graph-client@3.0.0
+    npm install @microsoft/microsoft-graph-types --save-dev
     ```
 
 ## Design the app
@@ -58,33 +51,6 @@ In this section you'll create the user interface for the app.
 1. Open **./src/styles.css** and add the following lines.
 
     :::code language="css" source="../demo/graph-tutorial/src/styles.css":::
-
-1. Add the Bootstrap module to the app. Open **./src/app/app.module.ts** and replace its contents with the following.
-
-    ```typescript
-    import { BrowserModule } from '@angular/platform-browser';
-    import { FormsModule } from '@angular/forms';
-    import { NgModule } from '@angular/core';
-    import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
-    import { AppRoutingModule } from './app-routing.module';
-    import { AppComponent } from './app.component';
-
-    @NgModule({
-      declarations: [
-        AppComponent
-      ],
-      imports: [
-        BrowserModule,
-        FormsModule,
-        AppRoutingModule,
-        NgbModule
-      ],
-      providers: [],
-      bootstrap: [AppComponent]
-    })
-    export class AppModule { }
-    ```
 
 1. Create a new file in the **./src/app** folder named **user.ts** and add the following code.
 
@@ -133,7 +99,7 @@ In this section you'll create the user interface for the app.
         this.user = {
           displayName: 'Adele Vance',
           email: 'AdeleV@contoso.com',
-          avatar: '',
+          avatar: '/assets/no-profile-photo.png',
           timeZone: ''
         };
       }

@@ -14,6 +14,7 @@ In this exercise you will extend the application from the previous exercise to s
 1. Open **./src/app/app.module.ts** and add the following `import` statements to the top of the file.
 
     ```typescript
+    import { FormsModule } from '@angular/forms';
     import { IPublicClientApplication,
              PublicClientApplication,
              BrowserCacheLocation } from '@azure/msal-browser';
@@ -27,9 +28,9 @@ In this exercise you will extend the application from the previous exercise to s
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="MSALFactorySnippet":::
 
-1. Add the `MsalModule` to the `imports` array inside the `@NgModule` declaration.
+1. Add `MsalModule` and `FormsModule` to the `imports` array inside the `@NgModule` declaration.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="ImportsSnippet" highlight="6":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/app.module.ts" id="ImportsSnippet" highlight="5-6":::
 
 1. Add the `MSALInstanceFactory` and `MsalService` to the `providers` array inside the `@NgModule` declaration.
 
@@ -51,8 +52,8 @@ In this section you'll create an authentication service and implement sign-in an
 
     ```typescript
     import { Injectable } from '@angular/core';
-    import { AccountInfo } from '@azure/msal-browser';
     import { MsalService } from '@azure/msal-angular';
+    import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 
     import { AlertsService } from './alerts.service';
     import { OAuthSettings } from '../oauth';
@@ -93,6 +94,9 @@ In this section you'll create an authentication service and implement sign-in an
           this.user.displayName = 'Adele Vance';
           this.user.email = 'AdeleV@contoso.com';
           this.user.avatar = '/assets/no-profile-photo.png';
+
+          // Temporary to display token in an error box
+          this.alertsService.addSuccess('Token acquired', result.accessToken);
         }
       }
 
@@ -101,28 +105,6 @@ In this section you'll create an authentication service and implement sign-in an
         await this.msalService.logout().toPromise();
         this.user = undefined;
         this.authenticated = false;
-      }
-
-      // Silently request an access token
-      async getAccessToken(): Promise<string> {
-        const result = await this.msalService
-          .acquireTokenSilent({
-            scopes: OAuthSettings.scopes
-          })
-          .toPromise()
-          .catch((reason) => {
-            this.alertsService.addError('Get token failed', JSON.stringify(reason, null, 2));
-          });
-
-        if (result) {
-          // Temporary to display token in an error box
-          this.alertsService.addSuccess('Token acquired', result.accessToken);
-          return result.accessToken;
-        }
-
-        // Couldn't get a token
-        this.authenticated = false;
-        return '';
       }
     }
     ```
@@ -133,7 +115,7 @@ In this section you'll create an authentication service and implement sign-in an
 
 1. Open **./src/app/home/home.component.ts** and replace its contents with the following.
 
-    :::code language="typescript" source="snippets/snippets.ts" id="homeSnippet" highlight="3,13-20,22,26-33":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="homeSnippet" highlight="3,12-21,23-30":::
 
 Save your changes and refresh the browser. Click the **Click here to sign in** button and you should be redirected to `https://login.microsoftonline.com`. Login with your Microsoft account and consent to the requested permissions. The app page should refresh, showing the token.
 
@@ -145,19 +127,19 @@ Right now the authentication service sets constant values for the user's display
 
     ```typescript
     import { Client } from '@microsoft/microsoft-graph-client';
+    import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
     import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
+    ```
+
+1. Add a property to the `AuthService` class called `graphClient`.
+
+    ```typescript
+    public graphClient?: Client;
     ```
 
 1. Add a new function to the `AuthService` class called `getUser`.
 
     :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="GetUserSnippet":::
-
-1. Locate and remove the following code in the `getAccessToken` method that adds an alert to display the access token.
-
-    ```typescript
-    // Temporary to display token in an error box
-    this.alertsService.addSuccess('Token acquired', result);
-    ```
 
 1. Locate and remove the following code from the `signIn` method.
 
@@ -167,6 +149,9 @@ Right now the authentication service sets constant values for the user's display
     this.user.displayName = "Adele Vance";
     this.user.email = "AdeleV@contoso.com";
     this.user.avatar = '/assets/no-profile-photo.png';
+
+    // Temporary to display token in an error box
+    this.alertsService.addSuccess('Token acquired', result);
     ```
 
 1. In its place, add the following code.
@@ -179,11 +164,7 @@ Right now the authentication service sets constant values for the user's display
 
 1. Change the `constructor` for the `AuthService` class to check if the user is already logged in and load their details if so. Replace the existing `constructor` with the following.
 
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="ConstructorSnippet" highlight="5-7":::
-
-1. Remove the temporary code from the `HomeComponent` class. Open **./src/app/home/home.component.ts** and replace the existing `signIn` function with the following.
-
-    :::code language="typescript" source="../demo/graph-tutorial/src/app/home/home.component.ts" id="SignInSnippet":::
+    :::code language="typescript" source="../demo/graph-tutorial/src/app/auth.service.ts" id="ConstructorSnippet" highlight="5-11":::
 
 Now if you save your changes and start the app, after sign-in you should end up back on the home page, but the UI should change to indicate that you are signed-in.
 
