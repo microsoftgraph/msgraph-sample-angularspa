@@ -1,3 +1,7 @@
+---
+ms.localizationpriority: medium
+---
+
 <!-- markdownlint-disable MD002 MD041 -->
 
 This tutorial teaches you how to build an Angular single-page app that uses Microsoft Graph to retrieve calendar information for a user.
