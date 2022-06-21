@@ -13,7 +13,7 @@ jobs:
   build:
     defaults:
       run:
-        working-directory: graph-app
+        working-directory: /graph-app
 
     runs-on: ubuntu-latest
 
