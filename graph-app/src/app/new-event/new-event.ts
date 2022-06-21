@@ -17,12 +17,12 @@ export class NewEvent {
       subject: this.subject,
       start: {
         dateTime: this.start,
-        timeZone: timeZone
+        timeZone: timeZone,
       },
       end: {
         dateTime: this.end,
-        timeZone: timeZone
-      }
+        timeZone: timeZone,
+      },
     };
 
     // If there are attendees, convert to array
@@ -31,12 +31,12 @@ export class NewEvent {
       graphEvent.attendees = [];
 
       const emails = this.attendees.split(';');
-      emails.forEach(email => {
+      emails.forEach((email) => {
         graphEvent.attendees?.push({
           type: 'required',
           emailAddress: {
-            address: email
-          }
+            address: email,
+          },
         });
       });
     }
@@ -45,7 +45,7 @@ export class NewEvent {
     if (this.body && this.body.length > 0) {
       graphEvent.body = {
         contentType: 'text',
-        content: this.body
+        content: this.body,
       };
     }
 

@@ -10,7 +10,7 @@ import { User } from '../user';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
   // Is a user logged in?
@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
     return this.authService.user;
   }
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     // Necessary to handle logout redirect properly
@@ -31,8 +31,8 @@ export class HomeComponent implements OnInit {
       next: (result: AuthenticationResult) => {},
       error: (error: any) => {
         console.log(error);
-      }
-    })
+      },
+    });
   }
 
   async signIn(): Promise<void> {

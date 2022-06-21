@@ -8,14 +8,12 @@ import { Alert } from '../alert';
 @Component({
   selector: 'app-alerts',
   templateUrl: './alerts.component.html',
-  styleUrls: ['./alerts.component.css']
+  styleUrls: ['./alerts.component.css'],
 })
 export class AlertsComponent implements OnInit {
+  constructor(public alertsService: AlertsService) {}
 
-  constructor(public alertsService: AlertsService) { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   close(alert: Alert) {
     this.alertsService.remove(alert);

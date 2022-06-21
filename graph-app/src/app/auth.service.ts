@@ -3,7 +3,11 @@
 
 import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
-import { AuthenticationResult, InteractionType, PublicClientApplication } from '@azure/msal-browser';
+import {
+  AuthenticationResult,
+  InteractionType,
+  PublicClientApplication,
+} from '@azure/msal-browser';
 import { Client } from '@microsoft/microsoft-graph-client';
 import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
@@ -14,9 +18,8 @@ import { User } from './user';
 import { lastValueFrom, Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class AuthService {
   public authenticated: boolean;
   public user?: User;
@@ -24,31 +27,36 @@ export class AuthService {
 
   constructor(
     private msalService: MsalService,
-    private alertsService: AlertsService) {
-
+    private alertsService: AlertsService
+  ) {
     const accounts = this.msalService.instance.getAllAccounts();
     this.authenticated = accounts.length > 0;
     if (this.authenticated) {
       this.msalService.instance.setActiveAccount(accounts[0]);
     }
-    this.getUser().then((user) => {this.user = user});
+    this.getUser().then((user) => {
+      this.user = user;
+    });
   }
 
   // Prompt the user to sign in and
   // grant consent to the requested permission scopes
   async signIn(): Promise<void> {
     try {
-      const result = await lastValueFrom(this.msalService
-        .loginPopup(OAuthSettings));
+      const result = await lastValueFrom(
+        this.msalService.loginPopup(OAuthSettings)
+      );
 
       if (result) {
         this.msalService.instance.setActiveAccount(result.account);
         this.authenticated = true;
         this.user = await this.getUser();
       }
-    } catch(reason: any) {
-      this.alertsService.addError('Login failed',
-        JSON.stringify(reason, null, 2));
+    } catch (reason: any) {
+      this.alertsService.addError(
+        'Login failed',
+        JSON.stringify(reason, null, 2)
+      );
     }
   }
 
@@ -73,13 +81,13 @@ export class AuthService {
       {
         account: this.msalService.instance.getActiveAccount()!,
         scopes: OAuthSettings.scopes,
-        interactionType: InteractionType.Popup
+        interactionType: InteractionType.Popup,
       }
     );
 
     // Initialize the Graph client
     this.graphClient = Client.initWithMiddleware({
-      authProvider: authProvider
+      authProvider: authProvider,
     });
 
     // Get the user from Graph (GET /me)

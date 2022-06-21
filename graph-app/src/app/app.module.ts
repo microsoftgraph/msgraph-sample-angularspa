@@ -5,12 +5,12 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { IPublicClientApplication,
-         PublicClientApplication,
-         BrowserCacheLocation } from '@azure/msal-browser';
-import { MsalModule,
-         MsalService,
-         MSAL_INSTANCE } from '@azure/msal-angular';
+import {
+  IPublicClientApplication,
+  PublicClientApplication,
+  BrowserCacheLocation,
+} from '@azure/msal-browser';
+import { MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,16 +24,18 @@ import { NewEventComponent } from './new-event/new-event.component';
 let msalInstance: IPublicClientApplication | undefined = undefined;
 
 export function MSALInstanceFactory(): IPublicClientApplication {
-  msalInstance = msalInstance ?? new PublicClientApplication({
-    auth: {
-      clientId: OAuthSettings.appId,
-      redirectUri: OAuthSettings.redirectUri,
-      postLogoutRedirectUri: OAuthSettings.redirectUri
-    },
-    cache: {
-      cacheLocation: BrowserCacheLocation.LocalStorage,
-    }
-  });
+  msalInstance =
+    msalInstance ??
+    new PublicClientApplication({
+      auth: {
+        clientId: OAuthSettings.appId,
+        redirectUri: OAuthSettings.redirectUri,
+        postLogoutRedirectUri: OAuthSettings.redirectUri,
+      },
+      cache: {
+        cacheLocation: BrowserCacheLocation.LocalStorage,
+      },
+    });
 
   return msalInstance;
 }
@@ -45,22 +47,22 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     HomeComponent,
     AlertsComponent,
     CalendarComponent,
-    NewEventComponent
+    NewEventComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     FormsModule,
-    MsalModule
+    MsalModule,
   ],
   providers: [
     {
       provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory
+      useFactory: MSALInstanceFactory,
     },
-    MsalService
+    MsalService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

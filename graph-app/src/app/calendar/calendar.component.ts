@@ -15,22 +15,22 @@ import { AlertsService } from '../alerts.service';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css']
+  styleUrls: ['./calendar.component.css'],
 })
-
 export class CalendarComponent implements OnInit {
-
   public events?: MicrosoftGraph.Event[];
 
   constructor(
     private authService: AuthService,
     private graphService: GraphService,
-    private alertsService: AlertsService) { }
+    private alertsService: AlertsService
+  ) {}
 
   async ngOnInit() {
     // Convert the user's timezone to IANA format
     const ianaName = findIana(this.authService.user?.timeZone ?? 'UTC');
-    const timeZone = ianaName![0].valueOf() || this.authService.user?.timeZone || 'UTC';
+    const timeZone =
+      ianaName![0].valueOf() || this.authService.user?.timeZone || 'UTC';
 
     // Get midnight on the start of the current week in the user's timezone,
     // but in UTC. For example, for Pacific Standard Time, the time value would be
@@ -42,19 +42,24 @@ export class CalendarComponent implements OnInit {
     this.events = await this.graphService.getCalendarView(
       weekStart.toISOString(),
       weekEnd.toISOString(),
-      this.authService.user?.timeZone ?? 'UTC');
+      this.authService.user?.timeZone ?? 'UTC'
+    );
   }
 
-  formatDateTimeTimeZone(dateTime: MicrosoftGraph.DateTimeTimeZone | undefined | null): Date | undefined {
+  formatDateTimeTimeZone(
+    dateTime: MicrosoftGraph.DateTimeTimeZone | undefined | null
+  ): Date | undefined {
     if (dateTime == undefined || dateTime == null) {
       return undefined;
     }
 
     try {
       return parseISO(dateTime.dateTime!);
-    }
-    catch(error) {
-      this.alertsService.addError('DateTimeTimeZone conversion error', JSON.stringify(error));
+    } catch (error) {
+      this.alertsService.addError(
+        'DateTimeTimeZone conversion error',
+        JSON.stringify(error)
+      );
       return undefined;
     }
   }

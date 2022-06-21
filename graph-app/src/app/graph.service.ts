@@ -8,16 +8,19 @@ import { AuthService } from './auth.service';
 import { AlertsService } from './alerts.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class GraphService {
-
   constructor(
     private authService: AuthService,
-    private alertsService: AlertsService) {}
+    private alertsService: AlertsService
+  ) {}
 
-  async getCalendarView(start: string, end: string, timeZone: string): Promise<MicrosoftGraph.Event[] | undefined> {
+  async getCalendarView(
+    start: string,
+    end: string,
+    timeZone: string
+  ): Promise<MicrosoftGraph.Event[] | undefined> {
     if (!this.authService.graphClient) {
       this.alertsService.addError('Graph client is not initialized.');
       return undefined;
@@ -28,12 +31,12 @@ export class GraphService {
       // &$select=subject,organizer,start,end
       // &$orderby=start/dateTime
       // &$top=50
-      const result =  await this.authService.graphClient
+      const result = await this.authService.graphClient
         .api('/me/calendarview')
         .header('Prefer', `outlook.timezone="${timeZone}"`)
         .query({
           startDateTime: start,
-          endDateTime: end
+          endDateTime: end,
         })
         .select('subject,organizer,start,end')
         .orderby('start/dateTime')
@@ -42,7 +45,10 @@ export class GraphService {
 
       return result.value;
     } catch (error) {
-      this.alertsService.addError('Could not get events', JSON.stringify(error, null, 2));
+      this.alertsService.addError(
+        'Could not get events',
+        JSON.stringify(error, null, 2)
+      );
     }
     return undefined;
   }
@@ -55,9 +61,7 @@ export class GraphService {
 
     try {
       // POST /me/events
-      await this.authService.graphClient
-        .api('/me/events')
-        .post(newEvent);
+      await this.authService.graphClient.api('/me/events').post(newEvent);
     } catch (error) {
       throw Error(JSON.stringify(error, null, 2));
     }

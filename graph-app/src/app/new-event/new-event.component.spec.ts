@@ -11,9 +11,8 @@ describe('NewEventComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewEventComponent ]
-    })
-    .compileComponents();
+      declarations: [NewEventComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NewEventComponent);
     component = fixture.componentInstance;
