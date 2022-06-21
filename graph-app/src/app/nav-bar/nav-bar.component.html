@@ -1,0 +1,42 @@
+<!-- Copyright (c) Microsoft Corporation.
+     Licensed under the MIT License. -->
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <div class="container">
+    <a routerLink="/" class="navbar-brand">Angular Graph Tutorial</a>
+    <button class="navbar-toggler" type="button" (click)="toggleNavBar()" [attr.aria-expanded]="showNav"
+    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex" [class.show]="showNav" id="navbarCollapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a routerLink="/" class="nav-link" routerLinkActive="active">Home</a>
+        </li>
+        <li *ngIf="authenticated" class="nav-item">
+          <a routerLink="/calendar" class="nav-link" routerLinkActive="active">Calendar</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="https://docs.microsoft.com/graph/overview" target="_blank">Docs</a>
+        </li>
+        <li *ngIf="authenticated" ngbDropdown placement="bottom-right" class="nav-item">
+          <a ngbDropdownToggle id="userMenu" class="nav-link avatar-link" role="button" aria-haspopup="true"
+            aria-expanded="false">
+            <img src="{{user != null ? user.avatar : ''}}" class="rounded-circle align-self-center mr-2" style="width: 32px;">
+          </a>
+          <div ngbDropdownMenu aria-labelledby="userMenu" class="dropdown-menu-end">
+            <h5 class="dropdown-item-text mb-0">{{user != null ? user.displayName : ''}}</h5>
+            <p class="dropdown-item-text text-muted mb-0">{{user != null ? user.email : ''}}</p>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" role="button" (click)="signOut()">Sign Out</button>
+          </div>
+        </li>
+        <li *ngIf="!authenticated" class="nav-item">
+          <button class="btn btn-link nav-link border-0" role="button" (click)="signIn()">Sign In</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
