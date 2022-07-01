@@ -1,5 +1,7 @@
 # Microsoft Graph sample Angular app
 
+[![Node.js CI](https://github.com/microsoftgraph/msgraph-training-angularspa/actions/workflows/node.js.yml/badge.svg)](https://github.com/microsoftgraph/msgraph-training-angularspa/actions/workflows/node.js.yml)
+
 This sample demonstrates how to use the Microsoft Graph JavaScript SDK to access data in Office 365 from Angular single-page applications.
 
 > **NOTE:** This sample was originally built from a tutorial published on the [Microsoft Graph tutorials](https://docs.microsoft.com/graph/tutorials) page. That tutorial has been removed.
