@@ -18,7 +18,7 @@
     "@angular/core": "^14.0.3",
     "@angular/forms": "^14.0.4",
     "@angular/localize": "^14.0.4",
-    "@angular/platform-browser": "^14.0.4",
+    "@angular/platform-browser": "^14.0.5",
     "@angular/platform-browser-dynamic": "^14.0.4",
     "@angular/router": "^14.0.4",
     "@azure/msal-angular": "^2.3.2",
