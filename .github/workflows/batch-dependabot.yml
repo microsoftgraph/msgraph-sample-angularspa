@@ -1,0 +1,18 @@
+name: Batch dependabot PRs
+
+on:
+  schedule:
+  - cron: "0 0 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dependabot Batcher
+        uses: Legal-and-General/dependabot-batcher@v1.0.0
+        with:
+          # A token with 'repo' and 'workflow' privileges
+          token: "${{ secrets.GITHUB_TOKEN }}"
