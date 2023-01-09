@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.0.4",
-    "@angular/cli": "~15.0.4",
+    "@angular/cli": "~15.0.5",
     "@angular/compiler-cli": "^15.0.4",
     "@microsoft/microsoft-graph-types": "^2.25.0",
     "@types/jasmine": "~4.3.0",
