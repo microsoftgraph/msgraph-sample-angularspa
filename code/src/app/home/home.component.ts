@@ -6,6 +6,7 @@ import { AuthenticationResult } from '@azure/msal-browser';
 
 import { AuthService } from '../auth.service';
 import { User } from '../user';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,10 @@ export class HomeComponent implements OnInit {
   get user(): User | undefined {
     return this.authService.user;
   }
+    // The environment
+    get environment(): string | undefined {
+      return environment.name;
+    }
 
   constructor(private authService: AuthService) {}
 

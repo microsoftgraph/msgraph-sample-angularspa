@@ -33,7 +33,7 @@
             ]
           },
           "configurations": {
-            "production": {
+            "tst": {
               "budgets": [
                 {
                   "type": "initial",
@@ -49,33 +49,39 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.tst.ts"
                 }
               ],
               "outputHashing": "all"
             },
-            "development": {
+            "dev": {
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "tst"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {
-              "browserTarget": "graph-app:build:production"
+            "tst": {
+              "browserTarget": "graph-app:build:tst"
             },
-            "development": {
-              "browserTarget": "graph-app:build:development"
+            "dev": {
+              "browserTarget": "graph-app:build:dev"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "dev"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -102,5 +108,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

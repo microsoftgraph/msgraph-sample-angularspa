@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start-dev": "ng serve --configuration dev",
+    "start-tst": "ng serve --configuration tst",
+    "build-dev": "ng build --configuration dev",
+    "build-tst": "ng build --configuration tst",
+    "watch": "ng build --watch --configuration dev",
     "test": "ng test",
     "lint": "prettier --check **/**.ts",
     "format": "prettier --write **/**.ts"
