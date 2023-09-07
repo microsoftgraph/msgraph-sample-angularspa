@@ -29,7 +29,8 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser",
-              "date-fns-tz"
+              "date-fns-tz",
+              "date-fns"
             ]
           },
           "configurations": {
