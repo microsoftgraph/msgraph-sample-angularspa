@@ -23,7 +23,7 @@ export class CalendarComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private graphService: GraphService,
-    private alertsService: AlertsService
+    private alertsService: AlertsService,
   ) {}
 
   async ngOnInit() {
@@ -42,12 +42,12 @@ export class CalendarComponent implements OnInit {
     this.events = await this.graphService.getCalendarView(
       weekStart.toISOString(),
       weekEnd.toISOString(),
-      this.authService.user?.timeZone ?? 'UTC'
+      this.authService.user?.timeZone ?? 'UTC',
     );
   }
 
   formatDateTimeTimeZone(
-    dateTime: MicrosoftGraph.DateTimeTimeZone | undefined | null
+    dateTime: MicrosoftGraph.DateTimeTimeZone | undefined | null,
   ): Date | undefined {
     if (dateTime == undefined || dateTime == null) {
       return undefined;
@@ -58,7 +58,7 @@ export class CalendarComponent implements OnInit {
     } catch (error) {
       this.alertsService.addError(
         'DateTimeTimeZone conversion error',
-        JSON.stringify(error)
+        JSON.stringify(error),
       );
       return undefined;
     }

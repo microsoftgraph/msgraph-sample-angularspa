@@ -13,13 +13,13 @@ import { AlertsService } from './alerts.service';
 export class GraphService {
   constructor(
     private authService: AuthService,
-    private alertsService: AlertsService
+    private alertsService: AlertsService,
   ) {}
 
   async getCalendarView(
     start: string,
     end: string,
-    timeZone: string
+    timeZone: string,
   ): Promise<MicrosoftGraph.Event[] | undefined> {
     if (!this.authService.graphClient) {
       this.alertsService.addError('Graph client is not initialized.');
@@ -47,7 +47,7 @@ export class GraphService {
     } catch (error) {
       this.alertsService.addError(
         'Could not get events',
-        JSON.stringify(error, null, 2)
+        JSON.stringify(error, null, 2),
       );
     }
     return undefined;

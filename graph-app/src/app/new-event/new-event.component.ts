@@ -19,7 +19,7 @@ export class NewEventComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private graphService: GraphService,
-    private alertsService: AlertsService
+    private alertsService: AlertsService,
   ) {}
 
   ngOnInit(): void {}

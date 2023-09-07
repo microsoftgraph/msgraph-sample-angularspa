@@ -27,7 +27,7 @@ export class AuthService {
 
   constructor(
     private msalService: MsalService,
-    private alertsService: AlertsService
+    private alertsService: AlertsService,
   ) {
     const accounts = this.msalService.instance.getAllAccounts();
     this.authenticated = accounts.length > 0;
@@ -44,7 +44,7 @@ export class AuthService {
   async signIn(): Promise<void> {
     try {
       const result = await lastValueFrom(
-        this.msalService.loginPopup(OAuthSettings)
+        this.msalService.loginPopup(OAuthSettings),
       );
 
       if (result) {
@@ -55,7 +55,7 @@ export class AuthService {
     } catch (reason: any) {
       this.alertsService.addError(
         'Login failed',
-        JSON.stringify(reason, null, 2)
+        JSON.stringify(reason, null, 2),
       );
     }
   }
@@ -82,7 +82,7 @@ export class AuthService {
         account: this.msalService.instance.getActiveAccount()!,
         scopes: OAuthSettings.scopes,
         interactionType: InteractionType.Popup,
-      }
+      },
     );
 
     // Initialize the Graph client
