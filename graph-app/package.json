@@ -19,7 +19,7 @@
     "@angular/forms": "^16.2.4",
     "@angular/localize": "^16.2.4",
     "@angular/platform-browser": "^16.2.4",
-    "@angular/platform-browser-dynamic": "^16.2.4",
+    "@angular/platform-browser-dynamic": "^16.2.11",
     "@angular/router": "^16.2.4",
     "@azure/msal-angular": "^3.0.4",
     "@azure/msal-browser": "^3.1.0",
