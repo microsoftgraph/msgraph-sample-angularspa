@@ -3,7 +3,6 @@ page_type: sample
 description: This sample demonstrates how to use the Microsoft Graph JavaScript SDK to access data in Office 365 from Angular single-page applications.
 products:
 - ms-graph
-- microsoft-graph-calendar-api
 - office-exchange-online
 languages:
 - typescript
