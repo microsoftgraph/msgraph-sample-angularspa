@@ -4,7 +4,7 @@
 import { Component, OnInit } from '@angular/core';
 import { parseISO } from 'date-fns';
 import { endOfWeek, startOfWeek } from 'date-fns/esm';
-import { zonedTimeToUtc } from 'date-fns-tz';
+import { fromZonedTime } from 'date-fns-tz';
 import { findIana } from 'windows-iana';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
@@ -36,8 +36,8 @@ export class CalendarComponent implements OnInit {
     // but in UTC. For example, for Pacific Standard Time, the time value would be
     // 07:00:00Z
     const now = new Date();
-    const weekStart = zonedTimeToUtc(startOfWeek(now), timeZone);
-    const weekEnd = zonedTimeToUtc(endOfWeek(now), timeZone);
+    const weekStart = fromZonedTime(startOfWeek(now), timeZone);
+    const weekEnd = fromZonedTime(endOfWeek(now), timeZone);
 
     this.events = await this.graphService.getCalendarView(
       weekStart.toISOString(),
