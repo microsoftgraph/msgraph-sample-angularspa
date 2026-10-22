@@ -3,7 +3,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { parseISO } from 'date-fns';
-import { endOfWeek, startOfWeek } from 'date-fns/esm';
+import { endOfWeek, startOfWeek } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { findIana } from 'windows-iana';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
